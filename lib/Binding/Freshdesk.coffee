@@ -1,7 +1,9 @@
 _ = require "underscore"
+Binding = require "../../core/Binding"
+Exception = require "../../core/Exception"
 BasicAuthentication = require "../../core/Authentication/BasicAuthentication"
 
-class FreshdeskBinding extends require "../../core/Binding"
+class Freshdesk extends Binding
 
   request: (options) ->
     _.defaults(options,
@@ -17,5 +19,10 @@ class FreshdeskBinding extends require "../../core/Binding"
       url: "/contacts.json"
       qs: qs
     , options
+    .spread (response, body) ->
+      if response.statusCode is 403
+        throw new Exception "Binding.rateLimitReached",
+          response: response
+      [response, body]
 
-module.exports = FreshdeskBinding
+module.exports = Freshdesk

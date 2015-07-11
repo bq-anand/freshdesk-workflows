@@ -1,4 +1,5 @@
 --watch
+--watch-extensions json
 --recursive
 --ui exports
 --require test/mocha.coffee

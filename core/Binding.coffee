@@ -3,7 +3,8 @@ Promise = require "bluebird"
 requestAsync = Promise.promisify(require "request")
 
 module.exports = class Binding
-  constructor: (config) ->
-    _.extend(@, config)
+  constructor: (options) ->
+    _.extend(@, options)
+    @requestAsync = requestAsync
   request: (options) ->
-    requestAsync(options)
+    @requestAsync(options)
