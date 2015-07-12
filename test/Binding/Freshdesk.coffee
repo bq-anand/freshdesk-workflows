@@ -3,9 +3,6 @@
 #return unless process.env.TEST_BINDINGS
 
 module.exports =
-  before: (setupDone) ->
-    nock.back.fixtures = "#{process.env.ROOT_DIR}/test/Binding/FreshdeskFixtures"
-    setupDone()
   beforeEach: (setupDone) ->
     Freshdesk = require "../../lib/Binding/Freshdesk"
     @binding = new Freshdesk(
@@ -14,7 +11,7 @@ module.exports =
     setupDone()
   "Binding":
     "@binding.getUsers() :: GET /contacts.json": (testDone) ->
-      nock.back "getUsers.json", (recordingDone) =>
+      nock.back "Binding/FreshdeskFixtures/getUsers.json", (recordingDone) =>
         @binding.getUsers().spread (response, body) ->
           # check body before response to make the test runner show more info in case of an error
           body.should.be.an("array")

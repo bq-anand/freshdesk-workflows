@@ -1,6 +1,5 @@
 module.exports =
   before: (setupDone) ->
-    nock.back.fixtures = "#{process.env.ROOT_DIR}/test/Job/Read/ReadUsersFixtures"
     setupDone()
   beforeEach: (setupDone) ->
     Freshdesk = require "../../../lib/Binding/Freshdesk"
@@ -13,17 +12,22 @@ module.exports =
     )
     setupDone()
   "ReadUsers":
-    "should exist": (testDone) ->
-      nock.back "ReadUsers.json", (recordingDone) =>
-        done = (error) -> recordingDone(); testDone(error)
+    "should return users": (testDone) ->
+      nock.back "Job/Read/ReadUsersFixtures/ReadUsers.json", (recordingDone) =>
         @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
+        done = (error) -> recordingDone(); testDone(error)
         onData = sinon.stub()
-        @job.data = {}
+        request = sinon.spy(@job.binding, "request")
         @job.run()
         @job.on "data", onData
         @job.on "end", ->
-          onData.should.have.callCount(934)
-          onData.should.have.been.alwaysCalledWithMatch sinon.match
-            email: sinon.match.string
-          done()
+          try
+            request.should.have.callCount(20)
+            onData.should.have.callCount(934)
+            onData.should.always.have.been.calledWithMatch sinon.match (object) ->
+              object.hasOwnProperty("email")
+            , "Object has own property \"email\""
+            done()
+          catch error
+            done(error)
         @job.on "error", done
