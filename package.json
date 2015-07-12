@@ -22,9 +22,11 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
+    "chai-things": "^0.2.0",
     "coffee-script": "^1.9.3",
     "mocha": "=2.1.0",
     "nconf": "^0.7.1",
+    "nock": "^2.7.0",
     "require-main": "^0.1.1",
     "sinon": "^1.15.4"
   },

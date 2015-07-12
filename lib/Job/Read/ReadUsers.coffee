@@ -9,10 +9,8 @@ class ReadUsers extends Read
       batchStartPage: 1
     super(options)
   run: ->
-    console.log "arst"
     @getSection()
   getSection: ->
-    console.log "arst"
     batchEndPage = @batchSize - @batchStartPage + 1
     promises = (@getPage(page) for page in [@batchStartPage..batchEndPage])
     Promise.all(promises)
@@ -27,7 +25,7 @@ class ReadUsers extends Read
       else
         @emit "end"
   readPage: (response, body) ->
-    @emit "data", _.pluck(body, "user") # Freshdesk wraps each body object in another object with a single key
+    @emit "data", body
     [response, body]
 
 module.exports = ReadUsers

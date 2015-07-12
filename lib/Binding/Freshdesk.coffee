@@ -11,7 +11,11 @@ class Freshdesk extends Binding
       json: true
     )
     BasicAuthentication(@credential, options)
-    super(options)
+    super(options).spread (response, body) ->
+      if response.statusCode is 403
+        throw new Exception "Binding.rateLimitReached",
+          response: response
+      [response, body]
 
   getUsers: (qs, options) ->
     @request _.extend
@@ -20,9 +24,6 @@ class Freshdesk extends Binding
       qs: qs
     , options
     .spread (response, body) ->
-      if response.statusCode is 403
-        throw new Exception "Binding.rateLimitReached",
-          response: response
-      [response, body]
+      [response, _.pluck(body, "user")] # Freshdesk wraps each body object in another object with a single key
 
 module.exports = Freshdesk

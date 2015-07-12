@@ -1,4 +1,3 @@
---watch
 --watch-extensions json
 --recursive
 --ui exports

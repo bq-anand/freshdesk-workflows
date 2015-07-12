@@ -12,10 +12,10 @@ module.exports =
       stream: new stream.Writable()
     )
   "ReadUsers":
-    "should exist": ->
+    "should exist": (done) ->
       @job.data = {}
-#      @job.run()
-#      @job.on "data", (chunk) ->
-#        should.exist(chunk)
-#      @job.on "end", done
+      @job.run()
+      @job.on "data", (chunk) ->
+        should.exist(chunk)
+      @job.on "end", done
       # data listener should.be.called

@@ -3,7 +3,7 @@ var _ = require("underscore");
 underscoreDeepExtend = require("underscore-deep-extend");
 _.mixin({deepExtend: underscoreDeepExtend(_)});
 
-module.exports = _.deepExtend({
+var config = _.deepExtend({
   testFramework: "mocha",
   files: [
     "core/**/*.coffee",
@@ -12,7 +12,7 @@ module.exports = _.deepExtend({
     "test/config.json"
   ],
   tests: [
-    "test/**/*",
+    "test/**/*.coffee",
     "!test/config.json",
     "!test/mocha.coffee",
     "!test/mocha.opts"
@@ -36,6 +36,11 @@ module.exports = _.deepExtend({
   }
 }, local);
 
+config.env = config.env || {};
+config.env.params = config.env.params || {};
+config.env.params.env = config.env.params.env || "";
+config.env.params.env += ";CWD="+process.cwd();
+
 /* Duplicate code, because wallaby.js and bootstrap() run in different contexts */
 function getLocalWallaby() {
   var local = {};
@@ -49,3 +54,5 @@ function getLocalWallaby() {
   }
   return local;
 }
+
+module.exports = config;
