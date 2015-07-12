@@ -5,32 +5,38 @@ Read = require "../../../core/Job/Read"
 class ReadUsers extends Read
   constructor: (options) ->
     _.defaults options,
-      batchSize: 10
-      batchStartPage: 1
+      chapterSize: 10
+      chapterStart: 1
+    @chapterPromises = []
     super(options)
   run: ->
-    @moveBatchWindow(@batchStartPage)
-    @getSection()
+    @jumpToChapter(@chapterStart)
+    @readChapter()
     return # don't leak promise; use events
-  moveBatchWindow: (batchStartPage) ->
-    @batchStartPage = batchStartPage
-    @batchEndPage = batchStartPage + @batchSize - 1
-  getSection: ->
-    promises = (@getPage(page) for page in [@batchStartPage..@batchEndPage])
-    Promise.all(promises).bind(@)
+  readChapter: ->
+    promises = @getChapterPromises()
+    promises[promises.length - 1] = promises[promises.length - 1].spread (response, body) ->
+      if _.isArray(body) and body.length # the last page of current chapter was full of data, so we should read next chapter
+        @jumpToChapter(@chapterStart + @chapterSize)
+        @readChapter()
+      else
+        @end()
+    @chapterPromises.push(
+      Promise.all(promises).bind(@)
+    )
+  end: ->
+    Promise.all(@chapterPromises).bind(@)
+    .then -> @emit "end"
     .catch (error) -> @emit "error", error
-  getPage: (page) ->
+  jumpToChapter: (chapterStart) ->
+    @chapterStart = chapterStart
+    @chapterEnd = chapterStart + @chapterSize - 1
+  getChapterPromises: ->
+    @readPage(page) for page in [@chapterStart..@chapterEnd]
+  readPage: (page) ->
     @binding.getUsers({page: page}).bind(@)
-    .spread @readPage
     .spread (response, body) ->
-      if page is @batchEndPage
-        if _.isArray(body) and body.length # maybe there's something more to read
-          @moveBatchWindow(@batchStartPage + @batchSize)
-          @getSection()
-        else # this page is empty, no need to send another batch of requests
-          @emit "end"
-  readPage: (response, body) ->
-    @emit "data", object for object in body
-    [response, body]
+      @emit "data", object for object in body
+      [response, body]
 
 module.exports = ReadUsers

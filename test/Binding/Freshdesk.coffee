@@ -3,12 +3,15 @@
 #return unless process.env.TEST_BINDINGS
 
 module.exports =
-  beforeEach: (done) ->
+  before: (setupDone) ->
+    nock.back.fixtures = "#{process.env.ROOT_DIR}/test/Binding/FreshdeskFixtures"
+    setupDone()
+  beforeEach: (setupDone) ->
     Freshdesk = require "../../lib/Binding/Freshdesk"
     @binding = new Freshdesk(
       credential: config.credentials.denis
     )
-    done()
+    setupDone()
   "Binding":
     "@binding.getUsers() :: GET /contacts.json": (testDone) ->
       nock.back "getUsers.json", (recordingDone) =>
@@ -22,7 +25,7 @@ module.exports =
         .finally recordingDone # use .finally to propagate exceptions (.then swallows them)
         .then testDone
         .catch testDone
-    "@binding should report rate limiting errors @ratelimit": (done) ->
+    "@binding should report rate limiting errors @ratelimit": (testDone) ->
       @binding
-      done()
+      testDone()
 

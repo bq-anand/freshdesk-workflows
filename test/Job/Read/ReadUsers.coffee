@@ -1,6 +1,7 @@
-stream = require "readable-stream"
-
 module.exports =
+  before: (setupDone) ->
+    nock.back.fixtures = "#{process.env.ROOT_DIR}/test/Job/Read/ReadUsersFixtures"
+    setupDone()
   beforeEach: (setupDone) ->
     Freshdesk = require "../../../lib/Binding/Freshdesk"
     binding = new Freshdesk(
@@ -9,25 +10,20 @@ module.exports =
     ReadUsers = require "../../../lib/Job/Read/ReadUsers"
     @job = new ReadUsers(
       binding: binding
-      stream: new stream.Writable()
     )
     setupDone()
   "ReadUsers":
     "should exist": (testDone) ->
       nock.back "ReadUsers.json", (recordingDone) =>
+        done = (error) -> recordingDone(); testDone(error)
         @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
         onData = sinon.stub()
         @job.data = {}
         @job.run()
         @job.on "data", onData
         @job.on "end", ->
-          onData.should.have.callCount(10)
+          onData.should.have.callCount(934)
           onData.should.have.been.alwaysCalledWithMatch sinon.match
             email: sinon.match.string
-          recordingDone()
-          testDone()
-        @job.on "error", (error) ->
-          recordingDone()
-          testDone(error)
-
-      # data listener should.be.called
+          done()
+        @job.on "error", done
