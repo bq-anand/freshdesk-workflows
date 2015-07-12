@@ -23,7 +23,7 @@ var config = _.deepExtend({
   },
   bootstrap: function (wallaby) {
     var mocha = wallaby.testFramework;
-    mocha.ui("exports");
+    mocha.ui("bdd");
     require.main.require("test/mocha");
     try {
       var local = require(wallaby.localProjectDir + "/wallaby.local"); // need to require again here, because bootstrap runs in another context
