@@ -13,8 +13,12 @@ class Freshdesk extends Binding
     BasicAuthentication(@credential, options)
     super(options).spread (response, body) ->
       if response.statusCode is 403
+#        throw new Error "Binding.rateLimitReached"
+#        console.log response
+#        console.log body
         throw new Exception "Binding.rateLimitReached",
           response: response
+          body: body
       [response, body]
 
   getUsers: (qs, options) ->

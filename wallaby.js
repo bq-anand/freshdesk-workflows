@@ -39,7 +39,7 @@ var config = _.deepExtend({
 config.env = config.env || {};
 config.env.params = config.env.params || {};
 config.env.params.env = config.env.params.env || "";
-config.env.params.env += ";CWD="+process.cwd();
+config.env.params.env += ";ROOT_DIR="+process.cwd();
 
 /* Duplicate code, because wallaby.js and bootstrap() run in different contexts */
 function getLocalWallaby() {

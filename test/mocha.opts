@@ -1,5 +1,6 @@
 --watch-extensions json
 --recursive
 --ui exports
+--async-only
 --require test/mocha.coffee
 --compilers coffee:coffee-script/register

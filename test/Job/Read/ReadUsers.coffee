@@ -1,7 +1,7 @@
 stream = require "readable-stream"
 
 module.exports =
-  beforeEach: ->
+  beforeEach: (setupDone) ->
     Freshdesk = require "../../../lib/Binding/Freshdesk"
     binding = new Freshdesk(
       credential: config.credentials.denis
@@ -11,11 +11,23 @@ module.exports =
       binding: binding
       stream: new stream.Writable()
     )
+    setupDone()
   "ReadUsers":
-    "should exist": (done) ->
-      @job.data = {}
-      @job.run()
-      @job.on "data", (chunk) ->
-        should.exist(chunk)
-      @job.on "end", done
+    "should exist": (testDone) ->
+      nock.back "ReadUsers.json", (recordingDone) =>
+        @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
+        onData = sinon.stub()
+        @job.data = {}
+        @job.run()
+        @job.on "data", onData
+        @job.on "end", ->
+          onData.should.have.callCount(10)
+          onData.should.have.been.alwaysCalledWithMatch sinon.match
+            email: sinon.match.string
+          recordingDone()
+          testDone()
+        @job.on "error", (error) ->
+          recordingDone()
+          testDone(error)
+
       # data listener should.be.called

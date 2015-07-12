@@ -28,7 +28,8 @@
     "nconf": "^0.7.1",
     "nock": "^2.7.0",
     "require-main": "^0.1.1",
-    "sinon": "^1.15.4"
+    "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0"
   },
   "dependencies": {
     "bluebird": "^2.9.33",
