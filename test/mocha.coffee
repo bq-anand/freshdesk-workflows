@@ -27,15 +27,9 @@ global.nock.back.fixtures = "#{process.env.ROOT_DIR}/test"
 # run "NOCK_BACK_MODE=record mocha path/to/your/test.coffee" manually to record API responses
 global.nock.back.setMode(process.env.NOCK_BACK_MODE or "lockdown")
 
-global.knex = (require "knex")(
-  client: "sqlite"
-)
-
-global.bookshelf = require("bookshelf")(global.knex)
-
-global.mockKnex = require "mock-knex"
-global.mockKnex.setAdapter "knex@0.8"
-global.mockKnex.mock global.knex
-
-global.knexTracker = global.mockKnex.getTracker()
-global.knexTracker.install()
+#global.mockKnex = require "mock-knex"
+#global.mockKnex.setAdapter "knex@0.8"
+#global.mockKnex.mock global.knex
+#
+#global.knexTracker = global.mockKnex.getTracker()
+#global.knexTracker.install()
