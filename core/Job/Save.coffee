@@ -60,14 +60,14 @@ class Save extends Job
 
   getUpdateColumns: (tableShortcut) ->
     columns = []
-    for key, value of @mapping
-      columns.push("\"#{key}\" = #{tableShortcut}.\"#{key}\"")
+    for columnName in @model.getColumnNames()
+      columns.push("\"#{columnName}\" = #{tableShortcut}.\"#{columnName}\"")
     columns.join()
 
   getSelectColumns: (tableShortcut) ->
     columns = []
-    for key, value of @mapping
-      columns.push("#{tableShortcut}.\"#{key}\"")
+    for columnName in @model.getColumnNames()
+      columns.push("#{tableShortcut}.\"#{columnName}\"")
     columns.join()
 
 module.exports = Save
