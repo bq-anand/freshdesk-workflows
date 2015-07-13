@@ -10,7 +10,7 @@ exec = (require "child_process").exec
 
 
 describe "SaveUsers", ->
-  knex = bookshelf = FreshdeskUser = job = null
+  knex = null; bookshelf = null; FreshdeskUser = null; job = null; # shared between tests
 
   before (beforeDone) ->
     knex = createKnex(

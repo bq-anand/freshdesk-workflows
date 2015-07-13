@@ -2,7 +2,7 @@ Freshdesk = require "../../../lib/Binding/Freshdesk"
 ReadUsers = require "../../../lib/Job/Read/ReadUsers"
 
 describe "ReadUsers", ->
-  job = binding = null
+  job = null; binding = null;
 
   beforeEach (setupDone) ->
     binding = new Freshdesk(
