@@ -26,6 +26,7 @@ describe "SaveUsers", ->
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> Avatar.createTable()
     .then -> FreshdeskUser.createTable()
+    .then -> Avatar.forge({api: "Freshdesk", uid: 1, name: "Test Freshdesk account", userId: "u8vTsnsk2M7x8my9h"}).save()
     .nodeify(beforeDone)
 
   beforeEach (setupDone) ->
@@ -41,11 +42,17 @@ describe "SaveUsers", ->
   it "should run", (testDone) ->
     job.run([
       uid: "1"
-      email: "hey@example.com"
+      email: "example@example.com"
       active: true
       avatarId: 1
       isDeleted: true
     ])
-#    .then ->
-#      job.knex.
+    .then ->
+      knex(FreshdeskUser::tableName).count("id")
+      .then (results) ->
+        results[0].count.should.be.equal("1")
+    .then ->
+      FreshdeskUser.where({id: 1}).fetch()
+      .then (model) ->
+        model.get("email").should.be.equal("example@example.com")
     .nodeify testDone

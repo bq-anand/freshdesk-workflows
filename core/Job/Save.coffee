@@ -53,6 +53,7 @@ class Save extends Job
               LEFT OUTER JOIN "#{@model::tableName}" as storage ON (buffer."uid" = storage."uid" AND buffer."avatarId" = storage."avatarId")
               WHERE storage."id" IS NULL
             """)
+      .bind(@)
       .then ->
         @knex.raw("""
           DROP TABLE IF EXISTS "#{@bufferTableName}"
