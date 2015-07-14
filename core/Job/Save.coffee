@@ -6,7 +6,7 @@ class Save extends Job
   constructor: (options) ->
     _.defaults options,
       bufferTableName: "UpsertData"
-    Match.check(options,
+    Match.check(options, Match.ObjectIncluding
       bookshelf: Object
       model: Function
       bufferTableName: String

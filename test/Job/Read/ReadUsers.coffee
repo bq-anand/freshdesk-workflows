@@ -12,7 +12,7 @@ describe "ReadUsers", ->
     job = new ReadUsers(
       binding: binding
       input: new stream.Readable({objectMode: true})
-      output: new stream.Writable({objectMode: true})
+      output: new stream.PassThrough({objectMode: true})
     )
     setupDone()
 
@@ -22,10 +22,9 @@ describe "ReadUsers", ->
       done = (error) -> recordingDone(); testDone(error)
       onData = sinon.stub()
       request = sinon.spy(job.binding, "request")
-      job.output._write = (chunk, encoding, callback) ->
+      job.output.on "data", (chunk) ->
         onData(chunk) if chunk
-        callback()
-      job.output.on "finish", ->
+      job.output.on "end", ->
         try
           request.should.have.callCount(20)
           onData.should.have.callCount(934)

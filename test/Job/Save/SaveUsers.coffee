@@ -1,3 +1,4 @@
+stream = require "readable-stream"
 Promise = require "bluebird"
 execAsync = Promise.promisify (require "child_process").exec
 SaveUsers = require "../../../lib/Job/Save/SaveUsers"
@@ -35,6 +36,8 @@ describe "SaveUsers", ->
       job = new SaveUsers(
         bookshelf: bookshelf
         avatarId: 1
+        input: new stream.PassThrough({objectMode: true})
+        output: new stream.PassThrough({objectMode: true})
       )
       setupDone()
 #    .nodeify(setupDone)
