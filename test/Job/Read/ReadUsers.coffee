@@ -1,3 +1,4 @@
+stream = require "readable-stream"
 Freshdesk = require "../../../lib/Binding/Freshdesk"
 ReadUsers = require "../../../lib/Job/Read/ReadUsers"
 
@@ -10,6 +11,8 @@ describe "ReadUsers", ->
     )
     job = new ReadUsers(
       binding: binding
+      input: new stream.Readable({objectMode: true})
+      output: new stream.Writable({objectMode: true})
     )
     setupDone()
 
@@ -19,9 +22,10 @@ describe "ReadUsers", ->
       done = (error) -> recordingDone(); testDone(error)
       onData = sinon.stub()
       request = sinon.spy(job.binding, "request")
-      job.run()
-      job.on "data", onData
-      job.on "end", ->
+      job.output._write = (chunk, encoding, callback) ->
+        onData(chunk) if chunk
+        callback()
+      job.output.on "finish", ->
         try
           request.should.have.callCount(20)
           onData.should.have.callCount(934)
@@ -31,4 +35,5 @@ describe "ReadUsers", ->
           done()
         catch error
           done(error)
-      job.on "error", done
+      job.output.on "error", done
+      job.run()

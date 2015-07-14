@@ -27,11 +27,11 @@ class ReadUsers extends Read
       Promise.all(promises).bind(@)
       .catch (error) ->
         @isErrorEmitted = true
-        @emit "error", error # we may emit "error" multiple times
+        @output.emit "error", error # we may emit "error" multiple times
     )
   end: ->
     Promise.all(@chapterPromises).bind(@)
-    .finally -> @emit "end" if not @isErrorEmitted
+    .finally -> @output.end(false) if not @isErrorEmitted
     return # break infinite loop
   jumpToChapter: (chapterStart) ->
     @chapterStart = chapterStart
@@ -41,7 +41,7 @@ class ReadUsers extends Read
   readPage: (page) ->
     @binding.getUsers({page: page}).bind(@)
     .spread (response, body) ->
-      @emit "data", object for object in body
+      @output.write(object) for object in body
       [response, body]
 
 
