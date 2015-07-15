@@ -1,12 +1,12 @@
 stream = require "readable-stream"
-Freshdesk = require "../../../lib/Binding/Freshdesk"
-ReadUsers = require "../../../lib/Job/Read/ReadUsers"
+Binding = require "../../../../lib/Binding"
+ReadUsers = require "../../../../lib/Job/Read/ReadUsers"
 
 describe "ReadUsers", ->
   job = null; binding = null;
 
   beforeEach (setupDone) ->
-    binding = new Freshdesk(
+    binding = new Binding(
       credential: config.credentials.denis
     )
     job = new ReadUsers(
@@ -17,7 +17,7 @@ describe "ReadUsers", ->
     setupDone()
 
   it "should run", (testDone) ->
-    nock.back "Job/Read/ReadUsersFixtures/ReadUsersSpec.json", (recordingDone) =>
+    nock.back "fixtures/ReadUsersNormalOperation.json", (recordingDone) =>
       @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
       done = (error) -> recordingDone(); testDone(error)
       onData = sinon.stub()

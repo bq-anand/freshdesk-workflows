@@ -10,3 +10,4 @@ class DownloadUsers extends Download
     options.save = new SaveUsers _.clone options
     super
 
+module.exports = DownloadUsers

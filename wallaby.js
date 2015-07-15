@@ -1,21 +1,18 @@
 var local = getLocalWallaby();
 var _ = require("underscore");
-underscoreDeepExtend = require("underscore-deep-extend");
-_.mixin({deepExtend: underscoreDeepExtend(_)});
+_.mixin(require("underscore.deep"));
 
 var config = _.deepExtend({
   testFramework: "mocha",
   files: [
     "core/**/*.coffee",
     "lib/**/*.coffee",
+    "test/helpers.coffee",
     "test/mocha.coffee",
     "test/config.json"
   ],
   tests: [
-    "test/**/*Spec.coffee",
-    "!test/config.json",
-    "!test/mocha.coffee",
-    "!test/mocha.opts"
+    "test/**/*Spec.coffee"
   ],
   env: {
     type: "node",

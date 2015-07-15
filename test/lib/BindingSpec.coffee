@@ -1,16 +1,16 @@
-Freshdesk = require "../../lib/Binding/Freshdesk"
+Binding = require "../../lib/Binding"
 
-describe "Freshdesk", ->
+describe "Binding", ->
   binding = null
 
   beforeEach (setupDone) ->
-    binding = new Freshdesk(
+    binding = new Binding(
       credential: config.credentials.denis
     )
     setupDone()
 
   it "binding.getUsers() :: GET /contacts.json", (testDone) ->
-    nock.back "Binding/FreshdeskFixtures/getUsersSpec.json", (recordingDone) =>
+    nock.back "fixtures/getUsers.json", (recordingDone) =>
       binding.getUsers().spread (response, body) ->
         # check body before response to make the test runner show more info in case of an error
         body.should.be.an("array")

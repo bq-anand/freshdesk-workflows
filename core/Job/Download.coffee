@@ -10,8 +10,8 @@ class Download extends Job
     Match.check options, Match.ObjectIncluding
       read: Read
       save: Save
-    save.input = read.output = new stream.PassThrough({objectMode: true})
     super
+    @save.input = @read.output = new stream.PassThrough({objectMode: true})
   run: ->
     @read.run()
     @save.run()

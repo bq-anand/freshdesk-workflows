@@ -8,6 +8,7 @@ class Job
       input: Match.Where (stream) -> Match.test(stream.read, Function) # stream.Readable or stream.Duplex
       output: Match.Where (stream) -> Match.test(stream.write, Function) # stream.Writable or stream.Duplex
     _.extend(@, options)
-  run: -> throw "Implement \"run\" method"
+
+  run: -> throw new Error("Implement me!")
 
 module.exports = Job

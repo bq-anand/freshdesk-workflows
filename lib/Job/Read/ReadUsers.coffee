@@ -44,5 +44,4 @@ class ReadUsers extends Read
       @output.write(object) for object in body
       [response, body]
 
-
 module.exports = ReadUsers

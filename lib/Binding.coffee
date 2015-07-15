@@ -1,9 +1,9 @@
 _ = require "underscore"
-Binding = require "../../core/Binding"
-Exception = require "../../core/Exception"
-BasicAuthentication = require "../../core/Authentication/BasicAuthentication"
+CommonBinding = require "../core/Binding"
+Exception = require "../core/Exception"
+BasicAuthentication = require "../core/Authentication/BasicAuthentication"
 
-class Freshdesk extends Binding
+class Binding extends CommonBinding
 
   request: (options) ->
     _.defaults(options,
@@ -30,4 +30,4 @@ class Freshdesk extends Binding
     .spread (response, body) ->
       [response, _.pluck(body, "user")] # Freshdesk wraps each body object in another object with a single key
 
-module.exports = Freshdesk
+module.exports = Binding

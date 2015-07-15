@@ -1,33 +1,27 @@
 stream = require "readable-stream"
 Promise = require "bluebird"
 execAsync = Promise.promisify (require "child_process").exec
-SaveUsers = require "../../../lib/Job/Save/SaveUsers"
-createKnex = require "knex"
-createBookshelf = require "bookshelf"
-createAvatar = require "../../../core/Model/Avatar"
-createFreshdeskUser = require "../../../lib/Model/FreshdeskUser"
+SaveUsers = require "../../../../lib/Job/Save/SaveUsers"
+helpers = require "../../../helpers"
+createAvatar = require "../../../../core/Model/Avatar"
+createUser = require "../../../../lib/Model/User"
 
 exec = (require "child_process").exec
 
 
 describe "SaveUsers", ->
-  knex = null; bookshelf = null; FreshdeskUser = null; job = null; # shared between tests
+  knex = null; bookshelf = null; User = null; job = null; # shared between tests
 
   before (beforeDone) ->
-    knex = createKnex(
-      client: "pg"
-      connection: "postgres://foreach:foreach@localhost/foreach_local"
-      pool: {min: 1, max: 1}
-    )
-    knex.Promise.longStackTraces()
-    bookshelf = createBookshelf(knex)
+    knex = helpers.createKnex()
+    bookshelf = helpers.createBookshelf(knex)
     Avatar = createAvatar(bookshelf)
-    FreshdeskUser = createFreshdeskUser(bookshelf)
+    User = createUser(bookshelf)
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> Avatar.createTable()
-    .then -> FreshdeskUser.createTable()
-    .then -> Avatar.forge({api: "Freshdesk", uid: 1, name: "Test Freshdesk account", userId: "u8vTsnsk2M7x8my9h"}).save()
+    .then -> User.createTable()
+    .then -> Avatar.forge({api: "Binding", uid: 1, name: "Test Binding account", userId: "u8vTsnsk2M7x8my9h"}).save()
     .nodeify beforeDone
 
   after (teardownDone) ->
@@ -49,19 +43,21 @@ describe "SaveUsers", ->
   it "should run", (testDone) ->
     job.run()
     .then ->
-      knex(FreshdeskUser::tableName).count("id")
+      knex(User::tableName).count("id")
       .then (results) ->
         results[0].count.should.be.equal("1")
     .then ->
-      FreshdeskUser.where({id: 1}).fetch()
+      User.where({id: 1}).fetch()
       .then (model) ->
         model.get("email").should.be.equal("example@example.com")
     .nodeify testDone
     job.input.write(
-      uid: "1"
+      id: 1
       email: "example@example.com"
       active: true
-      avatarId: 1
-      isDeleted: true
+      deleted: true
+      helpdesk_agent: false
+      created_at: new Date()
+      updated_at: new Date()
     )
     job.input.end()
