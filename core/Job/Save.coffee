@@ -26,7 +26,7 @@ class Save extends Job
         CREATE TEMPORARY TABLE IF NOT EXISTS "#{@bufferTableName}" (LIKE "#{@model::tableName}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING STORAGE)
       """)
 
-  push: (object) ->
+  insert: (object) ->
     @knex.insert(object).into(@bufferTableName)
 
   save: ->

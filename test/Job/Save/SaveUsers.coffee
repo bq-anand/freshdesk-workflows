@@ -28,7 +28,11 @@ describe "SaveUsers", ->
     .then -> Avatar.createTable()
     .then -> FreshdeskUser.createTable()
     .then -> Avatar.forge({api: "Freshdesk", uid: 1, name: "Test Freshdesk account", userId: "u8vTsnsk2M7x8my9h"}).save()
-    .nodeify(beforeDone)
+    .nodeify beforeDone
+
+  after (teardownDone) ->
+    knex.destroy()
+    .nodeify teardownDone
 
   beforeEach (setupDone) ->
 #    execAsync "pg_tmp 2>/dev/null"
@@ -43,13 +47,7 @@ describe "SaveUsers", ->
 #    .nodeify(setupDone)
 
   it "should run", (testDone) ->
-    job.run([
-      uid: "1"
-      email: "example@example.com"
-      active: true
-      avatarId: 1
-      isDeleted: true
-    ])
+    job.run()
     .then ->
       knex(FreshdeskUser::tableName).count("id")
       .then (results) ->
@@ -59,3 +57,11 @@ describe "SaveUsers", ->
       .then (model) ->
         model.get("email").should.be.equal("example@example.com")
     .nodeify testDone
+    job.input.write(
+      uid: "1"
+      email: "example@example.com"
+      active: true
+      avatarId: 1
+      isDeleted: true
+    )
+    job.input.end()

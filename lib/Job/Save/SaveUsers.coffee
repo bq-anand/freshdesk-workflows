@@ -14,7 +14,14 @@ class SaveUsers extends Save
     Promise.bind(@)
     .then @init
     .then ->
-      @push(object) for object in objects
+      new Promise (resolve, reject) =>
+        inserts = []
+        @input.on "readable", =>
+          while (object = @input.read()) isnt null # result may also be false, so we can't write `while (result = @input.read())`
+            inserts.push @insert(object) if object
+          true
+        @input.on "end", -> resolve(inserts)
+        @input.on "error", reject
     .all() # wait for objects to be inserted
     .then @save
 
