@@ -12,7 +12,7 @@ var config = _.deepExtend({
     "test/config.json"
   ],
   tests: [
-    "test/**/*.coffee",
+    "test/**/*Spec.coffee",
     "!test/config.json",
     "!test/mocha.coffee",
     "!test/mocha.opts"

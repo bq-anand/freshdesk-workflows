@@ -10,7 +10,7 @@ describe "Freshdesk", ->
     setupDone()
 
   it "binding.getUsers() :: GET /contacts.json", (testDone) ->
-    nock.back "Binding/FreshdeskFixtures/getUsers.json", (recordingDone) =>
+    nock.back "Binding/FreshdeskFixtures/getUsersSpec.json", (recordingDone) =>
       binding.getUsers().spread (response, body) ->
         # check body before response to make the test runner show more info in case of an error
         body.should.be.an("array")

@@ -14,7 +14,7 @@
 #    setupDone()
 #
 #  it "should run", (testDone) ->
-#    nock.back "Job/Read/ReadUsersFixtures/ReadUsers.json", (recordingDone) =>
+#    nock.back "Job/Read/ReadUsersFixtures/ReadUsersSpec.json", (recordingDone) =>
 #      @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
 #      done = (error) -> recordingDone(); testDone(error)
 #      onData = sinon.stub()
