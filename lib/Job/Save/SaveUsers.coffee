@@ -1,4 +1,4 @@
-UpsertThroughTemporaryTable = require "../../../core/Job/Save/UpsertThroughTemporaryTable"
+UpsertThroughTemporaryTable = require "../../.././Save/UpsertThroughTemporaryTable"
 createUser = require "../../Model/User"
 Serializer = require "../../Serializer"
 

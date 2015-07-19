@@ -1,6 +1,6 @@
 _ = require "underscore"
 Promise = require "bluebird"
-Download = require "../../../core/Job/Download"
+Download = require "../../.././Download"
 ReadUsers = require "../Read/ReadUsers"
 SaveUsers = require "../Save/SaveUsers"
 

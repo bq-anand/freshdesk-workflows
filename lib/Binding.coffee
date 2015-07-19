@@ -1,7 +1,7 @@
 _ = require "underscore"
-CommonBinding = require "../core/Binding"
-Exception = require "../core/Exception"
-BasicAuthentication = require "../core/Authentication/BasicAuthentication"
+CommonBinding = require ".././Binding"
+Exception = require ".././Exception"
+BasicAuthentication = require ".././BasicAuthentication"
 
 class Binding extends CommonBinding
 

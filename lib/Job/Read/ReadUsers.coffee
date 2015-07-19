@@ -1,6 +1,6 @@
 _ = require "underscore"
 Promise = require "bluebird"
-Read = require "../../../core/Job/Read"
+Read = require "../../.././Read"
 
 class ReadUsers extends Read
   constructor: (options) ->
