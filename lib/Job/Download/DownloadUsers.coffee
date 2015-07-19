@@ -1,6 +1,6 @@
 _ = require "underscore"
 Promise = require "bluebird"
-Download = require "../../.././Download"
+Download = require "../../../core/lib/Task/ActivityTask/Download"
 ReadUsers = require "../Read/ReadUsers"
 SaveUsers = require "../Save/SaveUsers"
 

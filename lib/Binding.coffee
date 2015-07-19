@@ -1,7 +1,7 @@
 _ = require "underscore"
-CommonBinding = require ".././Binding"
-Exception = require ".././Exception"
-BasicAuthentication = require ".././BasicAuthentication"
+errors = require "../helper/errors"
+CommonBinding = require "../core/lib/Binding"
+BasicAuthentication = require "../core/lib/Authentication/BasicAuthentication"
 
 class Binding extends CommonBinding
 
@@ -13,10 +13,7 @@ class Binding extends CommonBinding
     BasicAuthentication(@credential, options)
     super(options).spread (response, body) ->
       if response.statusCode is 403
-#        throw new Error "Binding.rateLimitReached"
-#        console.log response
-#        console.log body
-        throw new Exception "Binding.rateLimitReached",
+        throw new errors.RateLimitReachedError
           response: response
           body: body
       [response, body]

@@ -30,7 +30,7 @@ module.exports = (bookshelf) ->
       table.boolean("isHelpdeskAgent").notNullable()
       table.boolean("isActive").notNullable()
       table.boolean("isDeleted").notNullable()
-      table.integer("avatarId").notNullable().references("id").inTable("Avatars").onUpdate("CASCADE").onDelete("CASCADE")
+      table.string("avatarId").notNullable()
       table.unique(["uid", "avatarId"])
     createTable: ->
 

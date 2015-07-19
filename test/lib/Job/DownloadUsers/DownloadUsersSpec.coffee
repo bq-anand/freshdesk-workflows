@@ -2,7 +2,6 @@ stream = require "readable-stream"
 helpers = require "../../../helpers"
 Binding = require "../../../../lib/Binding"
 DownloadUsers = require "../../../../lib/Job/Download/DownloadUsers"
-createAvatar = require "../../../../core/Model/Avatar"
 createUser = require "../../../../lib/Model/User"
 
 describe "DownloadUsers", ->
@@ -11,13 +10,10 @@ describe "DownloadUsers", ->
   before (beforeDone) ->
     knex = helpers.createKnex()
     bookshelf = helpers.createBookshelf(knex)
-    Avatar = createAvatar(bookshelf)
     User = createUser(bookshelf)
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
-    .then -> Avatar.createTable()
     .then -> User.createTable()
-    .then -> Avatar.forge({api: "Binding", uid: 1, name: "Test Binding account", userId: "u8vTsnsk2M7x8my9h"}).save()
     .nodeify beforeDone
 
   after (teardownDone) ->
@@ -31,7 +27,7 @@ describe "DownloadUsers", ->
     job = new DownloadUsers(
       binding: binding
       bookshelf: bookshelf
-      avatarId: 1
+      avatarId: "wuXMSggRPPmW4FiE9"
       input: new stream.PassThrough({objectMode: true})
       output: new stream.PassThrough({objectMode: true})
     )

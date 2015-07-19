@@ -35,6 +35,7 @@
   "dependencies": {
     "bluebird": "^2.9.33",
     "bookshelf": "^0.8.1",
+    "errors": "^0.3.0",
     "knex": "^0.8.6",
     "mtr-match": "0.0.4",
     "pg": "^4.4.0",

@@ -1,0 +1,4 @@
+[submodule "core"]
+	path = core
+	url = git@github.com:fixin-platform/backend-core.git
+	branch = master

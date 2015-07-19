@@ -2,7 +2,7 @@ _ = require "underscore"
 _.mixin require "underscore.deep"
 camelize = require "underscore.string/camelize"
 underscore = require "underscore.string/underscored"
-BaseSerializer = require ".././Serializer"
+BaseSerializer = require "../core/lib/Serializer"
 
 class Serializer extends BaseSerializer
   constructor: (options) ->
