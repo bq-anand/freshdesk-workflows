@@ -34,7 +34,7 @@ describe "DownloadUsers", ->
     setupDone()
 
   it "should run", (testDone) ->
-    nock.back "fixtures/ReadUsersNormalOperation.json", (recordingDone) =>
+    nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) =>
       done = (error) -> recordingDone(); testDone(error)
       job.run()
       .then ->
