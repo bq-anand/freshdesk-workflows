@@ -18,8 +18,8 @@ global.sinon = require("sinon")
 global.nconf = require "nconf"
 global.config = global.nconf.file({file: "#{process.env.ROOT_DIR}/test/config.json"}).get()
 
-global.Promise = require "bluebird"
-global.Promise.longStackTraces()
+Promise = require "bluebird"
+Promise.longStackTraces()
 
 global.nock = require "nock"
 global.nock.back.fixtures = "#{process.env.ROOT_DIR}"

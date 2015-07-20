@@ -1,3 +1,4 @@
+Promise = require "bluebird"
 stream = require "readable-stream"
 helpers = require "../../../../core/test/helpers"
 Binding = require "../../../../lib/Binding"
