@@ -6,7 +6,6 @@ var config = _.deepExtend({
   testFramework: "mocha",
   files: [
     "core/**/*.coffee",
-    "!core/test/**/*.coffee",
     "helper/**/*.coffee",
     "lib/**/*.coffee",
     "test/helpers.coffee",

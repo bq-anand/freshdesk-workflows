@@ -8,16 +8,18 @@ class ReadUsers extends Read
       chapterSize: 10
       chapterStart: 1
     super(options)
-  run: ->
-    @chapterPromises = []
-    @isErrorEmitted = false
-    @jumpToChapter(@chapterStart)
-    @readChapter()
-    return # don't leak promise; use events
+  execute: ->
+    new Promise (resolve, reject) =>
+      @reject = reject
+      @resolve = resolve
+      @chapterPromises = []
+      @jumpToChapter(@chapterStart)
+      @readChapter()
+      return # don't leak Promise; will resolve manually
   readChapter: ->
     promises = @getChapterPromises()
     promises[0] = promises[0].spread (response, body) ->
-      return @end() if @isErrorEmitted
+#      return if @isErrorEmitted # should we return here if some other promise has been rejected?
       if _.isArray(body) and body.length # the last page of current chapter was full of data, so we should read next chapter
         @jumpToChapter(@chapterStart + @chapterSize)
         @readChapter()
@@ -26,12 +28,12 @@ class ReadUsers extends Read
     @chapterPromises.push(
       Promise.all(promises).bind(@)
       .catch (error) ->
-        @isErrorEmitted = true
-        @output.emit "error", error # we may emit "error" multiple times
+        @reject(error)
     )
   end: ->
     Promise.all(@chapterPromises).bind(@)
-    .finally -> @output.end(false) if not @isErrorEmitted
+    .then -> @output.end()
+    .then @resolve
     return # break infinite loop
   jumpToChapter: (chapterStart) ->
     @chapterStart = chapterStart

@@ -37,7 +37,7 @@ describe "DownloadUsers", ->
   it "should run", (testDone) ->
     nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) =>
       done = (error) -> recordingDone(); testDone(error)
-      job.run()
+      job.execute()
       .then ->
         knex(User::tableName).count("id")
         .then (results) ->

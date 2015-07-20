@@ -1,3 +1,4 @@
+Promise = require "bluebird"
 stream = require "readable-stream"
 Binding = require "../../../../../lib/Binding"
 ReadUsers = require "../../../../../lib/Task/ActivityTask/Read/ReadUsers"
@@ -5,7 +6,7 @@ ReadUsers = require "../../../../../lib/Task/ActivityTask/Read/ReadUsers"
 describe "ReadUsers", ->
   job = null; binding = null;
 
-  beforeEach (setupDone) ->
+  beforeEach ->
     binding = new Binding(
       credential: config.credentials.denis
     )
@@ -14,25 +15,20 @@ describe "ReadUsers", ->
       input: new stream.Readable({objectMode: true})
       output: new stream.PassThrough({objectMode: true})
     )
-    setupDone()
 
-  it "should run", (testDone) ->
-    nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) =>
-      @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
-      done = (error) -> recordingDone(); testDone(error)
-      onData = sinon.stub()
-      request = sinon.spy(job.binding, "request")
-      job.output.on "data", (chunk) ->
-        onData(chunk) if chunk
-      job.output.on "end", ->
-        try
-          request.should.have.callCount(20)
-          onData.should.have.callCount(934)
-          onData.should.always.have.been.calledWithMatch sinon.match (object) ->
+  it "should run", ->
+    @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
+    new Promise (resolve, reject) ->
+      nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) ->
+        sinon.spy(job.output, "write")
+        sinon.spy(job.binding, "request")
+        job.execute()
+        .then ->
+          job.binding.request.should.have.callCount(20)
+          job.output.write.should.have.callCount(934)
+          job.output.write.should.always.have.been.calledWithMatch sinon.match (object) ->
             object.hasOwnProperty("email")
           , "Object has own property \"email\""
-          done()
-        catch error
-          done(error)
-      job.output.on "error", done
-      job.run()
+        .then resolve
+        .catch reject
+        .finally recordingDone

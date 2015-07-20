@@ -37,7 +37,7 @@ describe "SaveUsers", ->
 #    .nodeify(setupDone)
 
   it "should run", (testDone) ->
-    job.run()
+    job.execute()
     .then ->
       knex(User::tableName).count("id")
       .then (results) ->
