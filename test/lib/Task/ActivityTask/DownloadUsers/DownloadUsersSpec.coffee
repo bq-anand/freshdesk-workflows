@@ -1,9 +1,9 @@
 Promise = require "bluebird"
 stream = require "readable-stream"
-helpers = require "../../../../core/test/helpers"
-Binding = require "../../../../lib/Binding"
-DownloadUsers = require "../../../../lib/ActivityTask/Download/DownloadUsers"
-createUser = require "../../../../lib/Model/User"
+helpers = require "../../../../../core/test/helpers"
+Binding = require "../../../../../lib/Binding"
+DownloadUsers = require "../../../../../lib/Task/ActivityTask/Download/DownloadUsers"
+createUser = require "../../../../../lib/Model/User"
 
 describe "DownloadUsers", ->
   job = null; binding = null; knex = null; bookshelf = null; User = null; job = null; # shared between tests

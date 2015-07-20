@@ -1,6 +1,6 @@
 _ = require "underscore"
 Promise = require "bluebird"
-Read = require "../../../core/lib/Task/ActivityTask/Read"
+Read = require "../../../../core/lib/Task/ActivityTask/Read"
 
 class ReadUsers extends Read
   constructor: (options) ->
