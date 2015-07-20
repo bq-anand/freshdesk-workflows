@@ -1,5 +1,5 @@
 stream = require "readable-stream"
-helpers = require "../../../helpers"
+helpers = require "../../../../core/test/helpers"
 Binding = require "../../../../lib/Binding"
 DownloadUsers = require "../../../../lib/Job/Download/DownloadUsers"
 createUser = require "../../../../lib/Model/User"

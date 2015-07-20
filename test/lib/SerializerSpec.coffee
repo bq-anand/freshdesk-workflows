@@ -1,5 +1,5 @@
 _ = require "underscore"
-helpers = require "../helpers"
+helpers = require "../../core/test/helpers"
 Serializer = require "../../lib/Serializer"
 createUser = require "../../lib/Model/User"
 
