@@ -16,7 +16,7 @@ describe "Serializer", ->
     knex.destroy()
     .nodeify teardownDone
 
-  beforeEach (setupDone) ->
+  beforeEach ->
     serializer = new Serializer(
       model: User
     )
@@ -42,9 +42,8 @@ describe "Serializer", ->
       "company_id": null,
       "custom_field": {}
     }
-    setupDone()
 
-  it "should be idempotent", (testDone) ->
+  it "should be idempotent", ->
     external2 = serializer.toExternal(serializer.toInternal(external))
     # Freshdesk outputs date in a slightly different format
     # Their version: '2015-07-11T06:33:38-04:00'
@@ -53,16 +52,9 @@ describe "Serializer", ->
     external.created_at = new Date(external.created_at).toISOString()
     external.updated_at = new Date(external.updated_at).toISOString()
     external.should.be.deep.equal(external2)
-    testDone()
 
-  it "should remap id to uid", (testDone) ->
-    serializer.toInternal(external).uid.should.be.equal(6001911496)
-    testDone()
+  it "should remap id to _uid", ->
+    serializer.toInternal(external)._uid.should.be.equal(6001911496)
 
-  it "should transform created_at::string into createdAt::Date", (testDone) ->
-    serializer.toInternal(external).createdAt.should.be.an.instanceof(Date)
-    testDone()
-
-  it "should transform helpdesk_agent::Boolean into isHelpdeskAgent::Boolean", (testDone) ->
-    serializer.toInternal(external).isHelpdeskAgent.should.be.a("boolean")
-    testDone()
+  it "should transform created_at::string into created_at::Date", ->
+    serializer.toInternal(external).created_at.should.be.an.instanceof(Date)
