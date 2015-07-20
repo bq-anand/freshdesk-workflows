@@ -1,6 +1,6 @@
 stream = require "readable-stream"
 Binding = require "../../../../lib/Binding"
-ReadUsers = require "../../../../lib/Job/Read/ReadUsers"
+ReadUsers = require "../../../../lib/ActivityTask/Read/ReadUsers"
 
 describe "ReadUsers", ->
   job = null; binding = null;

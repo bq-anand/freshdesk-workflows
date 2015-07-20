@@ -1,7 +1,7 @@
 stream = require "readable-stream"
 helpers = require "../../../../core/test/helpers"
 Binding = require "../../../../lib/Binding"
-DownloadUsers = require "../../../../lib/Job/Download/DownloadUsers"
+DownloadUsers = require "../../../../lib/ActivityTask/Download/DownloadUsers"
 createUser = require "../../../../lib/Model/User"
 
 describe "DownloadUsers", ->

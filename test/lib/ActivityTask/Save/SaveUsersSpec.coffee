@@ -1,7 +1,7 @@
 stream = require "readable-stream"
 Promise = require "bluebird"
 execAsync = Promise.promisify (require "child_process").exec
-SaveUsers = require "../../../../lib/Job/Save/SaveUsers"
+SaveUsers = require "../../../../lib/ActivityTask/Save/SaveUsers"
 helpers = require "../../../../core/test/helpers"
 createUser = require "../../../../lib/Model/User"
 
