@@ -28,8 +28,9 @@ describe "SaveUsers", ->
 #    execAsync "pg_tmp 2>/dev/null"
 #    .spread (postgresUrl) ->
       job = new SaveUsers(
-        bookshelf: bookshelf
         avatarId: "wuXMSggRPPmW4FiE9"
+      ,
+        bookshelf: bookshelf
         input: new stream.PassThrough({objectMode: true})
         output: new stream.PassThrough({objectMode: true})
       )

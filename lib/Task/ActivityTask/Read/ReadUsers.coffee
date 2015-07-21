@@ -3,11 +3,11 @@ Promise = require "bluebird"
 Read = require "../../../../core/lib/Task/ActivityTask/Read"
 
 class ReadUsers extends Read
-  constructor: (options) ->
+  constructor: (options, dependencies) ->
     _.defaults options,
       chapterSize: 10
       chapterStart: 1
-    super(options)
+    super
   execute: ->
     new Promise (resolve, reject) =>
       @reject = reject
@@ -15,7 +15,7 @@ class ReadUsers extends Read
       @chapterPromises = []
       @jumpToChapter(@chapterStart)
       @readChapter()
-      return # don't leak Promise; will resolve manually
+      return null # don't leak Promise; will resolve manually
   readChapter: ->
     promises = @getChapterPromises()
     promises[0] = promises[0].spread (response, body) ->
@@ -34,7 +34,7 @@ class ReadUsers extends Read
     Promise.all(@chapterPromises).bind(@)
     .then -> @output.end()
     .then @resolve
-    return # break infinite loop
+    return null # break infinite loop
   jumpToChapter: (chapterStart) ->
     @chapterStart = chapterStart
     @chapterEnd = chapterStart + @chapterSize - 1

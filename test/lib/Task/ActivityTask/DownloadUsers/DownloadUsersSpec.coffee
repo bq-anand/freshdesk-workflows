@@ -26,9 +26,13 @@ describe "DownloadUsers", ->
       credential: config.credentials.denis
     )
     job = new DownloadUsers(
+      ReadUsers:
+        avatarId: "wuXMSggRPPmW4FiE9"
+      SaveUsers:
+        avatarId: "wuXMSggRPPmW4FiE9"
+    ,
       binding: binding
       bookshelf: bookshelf
-      avatarId: "wuXMSggRPPmW4FiE9"
       input: new stream.PassThrough({objectMode: true})
       output: new stream.PassThrough({objectMode: true})
     )

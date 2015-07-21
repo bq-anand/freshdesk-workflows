@@ -11,6 +11,8 @@ describe "ReadUsers", ->
       credential: config.credentials.denis
     )
     job = new ReadUsers(
+      {}
+    ,
       binding: binding
       input: new stream.Readable({objectMode: true})
       output: new stream.PassThrough({objectMode: true})
