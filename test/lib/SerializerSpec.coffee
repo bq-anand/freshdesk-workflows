@@ -32,7 +32,7 @@ describe "Serializer", ->
     sample.should.be.deep.equal(sampleMirror)
 
   it "should remap id to _uid", ->
-    serializer.toInternal(sample)._uid.should.be.equal(6001911496)
+    serializer.toInternal(sample)._uid.should.be.equal(sample.id)
 
   it "should transform created_at::string into created_at::Date", ->
     serializer.toInternal(sample).created_at.should.be.an.instanceof(Date)
