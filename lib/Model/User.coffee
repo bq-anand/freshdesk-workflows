@@ -33,5 +33,5 @@ module.exports = (bookshelf) ->
         table.string("_avatarId").notNullable()
         table.dateTime("_createdAt").notNullable()
         table.dateTime("_updatedAt").notNullable()
-        table.unique(["id", "_avatarId"])
+        table.unique(["_uid", "_avatarId"])
   )
