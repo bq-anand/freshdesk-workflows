@@ -18,8 +18,8 @@ describe "ReadUsers", ->
     task = new ReadUsers(
       params: {}
     ,
-      input: new stream.Readable({objectMode: true})
-      output: new stream.PassThrough({objectMode: true})
+      in: new stream.Readable({objectMode: true})
+      out: new stream.PassThrough({objectMode: true})
       binding: binding
       logger: logger
     )
@@ -28,13 +28,13 @@ describe "ReadUsers", ->
     @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
     new Promise (resolve, reject) ->
       nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) ->
-        sinon.spy(task.output, "write")
+        sinon.spy(task.out, "write")
         sinon.spy(task.binding, "request")
         task.execute()
         .then ->
           task.binding.request.should.have.callCount(20)
-          task.output.write.should.have.callCount(934)
-          task.output.write.should.always.have.been.calledWithMatch sinon.match (object) ->
+          task.out.write.should.have.callCount(934)
+          task.out.write.should.always.have.been.calledWithMatch sinon.match (object) ->
             object.hasOwnProperty("email")
           , "Object has own property \"email\""
         .then resolve
