@@ -12,7 +12,7 @@ createUser = require "../../../../../lib/Model/User"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/SaveUsers/sample.json"
 
 describe "DownloadUsers", ->
-  binding = null; knex = null; bookshelf = null; logger = null; User = null; job = null; # shared between tests
+  binding = null; knex = null; bookshelf = null; logger = null; User = null; task = null; # shared between tests
 
   before (beforeDone) ->
     knex = createKnex settings.knex
@@ -32,7 +32,7 @@ describe "DownloadUsers", ->
     binding = new Binding(
       credential: settings.credentials.denis
     )
-    job = new DownloadUsers(
+    task = new DownloadUsers(
       ReadUsers:
         avatarId: "wuXMSggRPPmW4FiE9"
       SaveUsers:
@@ -48,7 +48,7 @@ describe "DownloadUsers", ->
   it "should run", ->
     new Promise (resolve, reject) ->
       nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) ->
-        job.execute()
+        task.execute()
         .then ->
           knex(User::tableName).count("id")
           .then (results) ->

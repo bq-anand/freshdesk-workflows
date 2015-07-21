@@ -11,7 +11,7 @@ createUser = require "../../../../../lib/Model/User"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/SaveUsers/sample.json"
 
 describe "SaveUsers", ->
-  knex = null; bookshelf = null; logger = null; User = null; job = null; # shared between tests
+  knex = null; bookshelf = null; logger = null; User = null; task = null; # shared between tests
 
   before (beforeDone) ->
     knex = createKnex settings.knex
@@ -29,7 +29,7 @@ describe "SaveUsers", ->
     .nodeify teardownDone
 
   beforeEach ->
-    job = new SaveUsers(
+    task = new SaveUsers(
       avatarId: "wuXMSggRPPmW4FiE9"
     ,
       input: new stream.PassThrough({objectMode: true})
@@ -39,9 +39,9 @@ describe "SaveUsers", ->
     )
 
   it "should run", ->
-    job.input.write(sample)
-    job.input.end()
-    job.execute()
+    task.input.write(sample)
+    task.input.end()
+    task.execute()
     .then ->
       knex(User::tableName).count("id")
       .then (results) ->
