@@ -6,4 +6,7 @@ class Serializer extends BaseSerializer
   constructor: (options) ->
     super
 
+  keymap: ->
+    "id": "_uid"
+
 module.exports = Serializer
