@@ -6,19 +6,6 @@ settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_D
 Binding = require "../../../../../lib/Binding"
 ReadUsers = require "../../../../../lib/Task/ActivityTask/Read/ReadUsers"
 
-describe "ReadOrders", ->
-  job = null; binding = null;
-
-  beforeEach ->
-    job = new ReadOrders(
-      params:
-        datestart: "09/10/2013"
-        dateend: "09/15/2013"
-    , _.extend dependencies(),
-        input: new stream.Readable({objectMode: true})
-        output: new stream.PassThrough({objectMode: true})
-    )
-
 describe "ReadUsers", ->
   binding = null; logger = null; task = null;
 
