@@ -4,14 +4,13 @@ settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/setti
 describe "Binding", ->
   binding = null
 
-  beforeEach (setupDone) ->
+  beforeEach ->
     binding = new Binding(
       credential: settings.credentials.denis
     )
-    setupDone()
 
   it "binding.getUsers() :: GET /contacts.json", (testDone) ->
-    nock.back "test/fixtures/getUsers.json", (recordingDone) =>
+    nock.back "test/fixtures/Binding/getUsers.json", (recordingDone) =>
       binding.getUsers().spread (response, body) ->
         # check body before response to make the test runner show more info in case of an error
         body.should.be.an("array")
