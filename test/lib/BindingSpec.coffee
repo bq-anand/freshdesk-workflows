@@ -1,11 +1,12 @@
 Binding = require "../../lib/Binding"
+settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 describe "Binding", ->
   binding = null
 
   beforeEach (setupDone) ->
     binding = new Binding(
-      credential: config.credentials.denis
+      credential: settings.credentials.denis
     )
     setupDone()
 

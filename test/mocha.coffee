@@ -15,9 +15,6 @@ chai.use(chaiSinon)
 
 global.sinon = require("sinon")
 
-global.nconf = require "nconf"
-global.config = global.nconf.file({file: "#{process.env.ROOT_DIR}/test/config.json"}).get()
-
 Promise = require "bluebird"
 Promise.longStackTraces()
 

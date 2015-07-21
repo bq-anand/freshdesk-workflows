@@ -4,6 +4,7 @@ helpers = require "../../../../../core/test/helpers"
 Binding = require "../../../../../lib/Binding"
 DownloadUsers = require "../../../../../lib/Task/ActivityTask/Download/DownloadUsers"
 createUser = require "../../../../../lib/Model/User"
+settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 describe "DownloadUsers", ->
   job = null; binding = null; knex = null; bookshelf = null; User = null; job = null; # shared between tests
@@ -23,7 +24,7 @@ describe "DownloadUsers", ->
 
   beforeEach (setupDone) ->
     binding = new Binding(
-      credential: config.credentials.denis
+      credential: settings.credentials.denis
     )
     job = new DownloadUsers(
       ReadUsers:

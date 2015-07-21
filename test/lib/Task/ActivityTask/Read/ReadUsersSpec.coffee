@@ -2,13 +2,14 @@ Promise = require "bluebird"
 stream = require "readable-stream"
 Binding = require "../../../../../lib/Binding"
 ReadUsers = require "../../../../../lib/Task/ActivityTask/Read/ReadUsers"
+settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 describe "ReadUsers", ->
   job = null; binding = null;
 
   beforeEach ->
     binding = new Binding(
-      credential: config.credentials.denis
+      credential: settings.credentials.denis
     )
     job = new ReadUsers(
       {}
