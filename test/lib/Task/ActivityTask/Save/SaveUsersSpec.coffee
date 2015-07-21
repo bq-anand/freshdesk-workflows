@@ -8,6 +8,7 @@ settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_D
 
 SaveUsers = require "../../../../../lib/Task/ActivityTask/Save/SaveUsers"
 createUser = require "../../../../../lib/Model/User"
+sample = require "#{process.env.ROOT_DIR}/test/fixtures/SaveUsers/sample.json"
 
 describe "SaveUsers", ->
   knex = null; bookshelf = null; logger = null; User = null; job = null; # shared between tests
@@ -38,15 +39,7 @@ describe "SaveUsers", ->
     )
 
   it "should run", ->
-    job.input.write(
-      id: 1
-      email: "example@example.com"
-      active: true
-      deleted: true
-      helpdesk_agent: false
-      created_at: new Date()
-      updated_at: new Date()
-    )
+    job.input.write(sample)
     job.input.end()
     job.execute()
     .then ->

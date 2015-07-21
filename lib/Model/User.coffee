@@ -10,9 +10,9 @@ module.exports = (bookshelf) ->
       buildTable: (table) ->
         table.increments()
         table.string("address").nullable().defaultTo("")
-        table.bigInteger("customer_id").nullable()
-        table.bigInteger("company_id").nullable()
-        table.bigInteger("external_id").nullable()
+        table.integer("customer_id").nullable()
+        table.integer("company_id").nullable()
+        table.integer("external_id").nullable()
         table.string("fb_profile_id").nullable()
         table.string("description").nullable()
         table.string("email").nullable()

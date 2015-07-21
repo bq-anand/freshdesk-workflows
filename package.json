@@ -36,6 +36,7 @@
     "bookshelf": "^0.8.1",
     "errors": "^0.3.0",
     "knex": "^0.8.6",
+    "moment": "^2.10.3",
     "mtr-match": "0.0.4",
     "path-parse": "^1.0.5",
     "pg": "^4.4.0",
