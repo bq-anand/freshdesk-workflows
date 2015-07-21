@@ -6,7 +6,7 @@ module.exports = (bookshelf) ->
     tableName: "FreshdeskUsers"
     hasTimestamps: ['_createdAt', '_updatedAt']
   ,
-    _.extend {}, helper(bookshelf),
+    _.extend helper(bookshelf),
       buildTable: (table) ->
         table.increments()
         table.string("address").nullable().defaultTo("")

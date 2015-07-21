@@ -1,5 +1,11 @@
 _ = require "underscore"
-helpers = require "../../core/test/helpers"
+Promise = require "bluebird"
+stream = require "readable-stream"
+createLogger = require "../../core/helper/logger"
+createKnex = require "../../core/helper/knex"
+createBookshelf = require "../../core/helper/bookshelf"
+settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
+
 Serializer = require "../../lib/Serializer"
 createUser = require "../../lib/Model/User"
 
@@ -7,9 +13,9 @@ describe "Serializer", ->
   serializer = null; external = null; knex = null; User = null;
 
   before (beforeDone) ->
-    knex = helpers.createKnex()
-    bookshelf = helpers.createBookshelf(knex)
-    User = createUser(bookshelf)
+    knex = createKnex settings.knex
+    bookshelf = createBookshelf knex
+    User = createUser bookshelf
     beforeDone()
 
   after (teardownDone) ->

@@ -1,18 +1,23 @@
+_ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-helpers = require "../../../../../core/test/helpers"
+createLogger = require "../../../../../core/helper/logger"
+createKnex = require "../../../../../core/helper/knex"
+createBookshelf = require "../../../../../core/helper/bookshelf"
+settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
+
 Binding = require "../../../../../lib/Binding"
 DownloadUsers = require "../../../../../lib/Task/ActivityTask/Download/DownloadUsers"
 createUser = require "../../../../../lib/Model/User"
-settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 describe "DownloadUsers", ->
-  job = null; binding = null; knex = null; bookshelf = null; User = null; job = null; # shared between tests
+  binding = null; knex = null; bookshelf = null; logger = null; User = null; job = null; # shared between tests
 
   before (beforeDone) ->
-    knex = helpers.createKnex()
-    bookshelf = helpers.createBookshelf(knex)
-    User = createUser(bookshelf)
+    knex = createKnex settings.knex
+    bookshelf = createBookshelf knex
+    logger = createLogger settings.logger
+    User = createUser bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> User.createTable()
@@ -32,10 +37,11 @@ describe "DownloadUsers", ->
       SaveUsers:
         avatarId: "wuXMSggRPPmW4FiE9"
     ,
-      binding: binding
-      bookshelf: bookshelf
       input: new stream.PassThrough({objectMode: true})
       output: new stream.PassThrough({objectMode: true})
+      binding: binding
+      bookshelf: bookshelf
+      logger: logger
     )
     setupDone()
 

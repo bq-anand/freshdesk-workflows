@@ -1,22 +1,40 @@
+_ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
+createLogger = require "../../../../../core/helper/logger"
+settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 Binding = require "../../../../../lib/Binding"
 ReadUsers = require "../../../../../lib/Task/ActivityTask/Read/ReadUsers"
-settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
-describe "ReadUsers", ->
+describe "ReadOrders", ->
   job = null; binding = null;
 
   beforeEach ->
-    binding = new Binding(
-      credential: settings.credentials.denis
+    job = new ReadOrders(
+      params:
+        datestart: "09/10/2013"
+        dateend: "09/15/2013"
+    , _.extend dependencies(),
+        input: new stream.Readable({objectMode: true})
+        output: new stream.PassThrough({objectMode: true})
     )
+
+describe "ReadUsers", ->
+  binding = null; logger = null; job = null;
+
+  before ->
+    binding = new Binding
+      credential: settings.credentials.denis
+    logger = createLogger settings.logger
+
+  beforeEach ->
     job = new ReadUsers(
-      {}
+      params: {}
     ,
-      binding: binding
       input: new stream.Readable({objectMode: true})
       output: new stream.PassThrough({objectMode: true})
+      binding: binding
+      logger: logger
     )
 
   it "should run", ->
