@@ -1,0 +1,41 @@
+[
+  {
+    "name": "FreshdeskReadUsers",
+    "version": "1.0.0",
+    "defaultTaskList": {
+      "name": "FreshdeskReadUsers"
+    },
+    "defaultTaskHeartbeatTimeout": "600000",
+    "defaultTaskPriority": "0",
+    "defaultTaskScheduleToStartTimeout": "1800000",
+    "defaultTaskStartToCloseTimeout": "600000",
+    "defaultTaskScheduleToCloseTimeout": "NONE",
+    "description": ""
+  },
+  {
+    "name": "FreshdeskSaveUsers",
+    "version": "1.0.0",
+    "defaultTaskList": {
+      "name": "FreshdeskSaveUsers"
+    },
+    "defaultTaskHeartbeatTimeout": "600000",
+    "defaultTaskPriority": "0",
+    "defaultTaskScheduleToStartTimeout": "1800000",
+    "defaultTaskStartToCloseTimeout": "600000",
+    "defaultTaskScheduleToCloseTimeout": "NONE",
+    "description": ""
+  },
+  {
+    "name": "FreshdeskDownloadUsers",
+    "version": "1.0.0",
+    "defaultTaskList": {
+      "name": "FreshdeskDownloadUsers"
+    },
+    "defaultTaskHeartbeatTimeout": "600000",
+    "defaultTaskPriority": "0",
+    "defaultTaskScheduleToStartTimeout": "1800000",
+    "defaultTaskStartToCloseTimeout": "600000",
+    "defaultTaskScheduleToCloseTimeout": "NONE",
+    "description": ""
+  }
+]
