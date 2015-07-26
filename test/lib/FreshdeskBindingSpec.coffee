@@ -1,20 +1,20 @@
 _ = require "underscore"
 Promise = require "bluebird"
-Binding = require "../../lib/Binding"
+FreshdeskBinding = require "../../lib/FreshdeskBinding"
 settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
-describe "Binding", ->
+describe "FreshdeskBinding", ->
   @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
 
   binding = null
 
   beforeEach ->
-    binding = new Binding
+    binding = new FreshdeskBinding
       credential: settings.credentials.denis
 
   it "binding.getUsers() :: GET /contacts.json", ->
     new Promise (resolve, reject) ->
-      nock.back "test/fixtures/Binding/getUsers.json", (recordingDone) ->
+      nock.back "test/fixtures/FreshdeskBinding/getUsers.json", (recordingDone) ->
         binding.getUsers()
         .spread (response, body) ->
           # check body before response to make the test runner show more info in case of an error

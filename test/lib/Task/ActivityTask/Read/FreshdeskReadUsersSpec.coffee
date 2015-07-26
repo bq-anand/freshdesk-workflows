@@ -3,19 +3,19 @@ Promise = require "bluebird"
 stream = require "readable-stream"
 createLogger = require "../../../../../core/helper/logger"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
-Binding = require "../../../../../lib/Binding"
-ReadUsers = require "../../../../../lib/Task/ActivityTask/Read/ReadUsers"
+FreshdeskBinding = require "../../../../../lib/FreshdeskBinding"
+FreshdeskReadUsers = require "../../../../../lib/Task/ActivityTask/Read/FreshdeskReadUsers"
 
-describe "ReadUsers", ->
+describe "FreshdeskReadUsers", ->
   binding = null; logger = null; task = null;
 
   before ->
-    binding = new Binding
+    binding = new FreshdeskBinding
       credential: settings.credentials.denis
     logger = createLogger settings.logger
 
   beforeEach ->
-    task = new ReadUsers(
+    task = new FreshdeskReadUsers(
       params: {}
     ,
       {}
@@ -29,7 +29,7 @@ describe "ReadUsers", ->
   it "should run", ->
     @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
     new Promise (resolve, reject) ->
-      nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) ->
+      nock.back "test/fixtures/FreshdeskReadUsers/normal.json", (recordingDone) ->
         sinon.spy(task.out, "write")
         sinon.spy(task.binding, "request")
         task.execute()

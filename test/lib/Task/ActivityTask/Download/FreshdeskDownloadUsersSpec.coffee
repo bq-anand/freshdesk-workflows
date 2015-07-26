@@ -6,22 +6,22 @@ createKnex = require "../../../../../core/helper/knex"
 createBookshelf = require "../../../../../core/helper/bookshelf"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
-Binding = require "../../../../../lib/Binding"
-DownloadUsers = require "../../../../../lib/Task/ActivityTask/Download/DownloadUsers"
-createUser = require "../../../../../lib/Model/User"
-sample = require "#{process.env.ROOT_DIR}/test/fixtures/SaveUsers/sample.json"
+FreshdeskBinding = require "../../../../../lib/FreshdeskBinding"
+FreshdeskDownloadUsers = require "../../../../../lib/Task/ActivityTask/Download/FreshdeskDownloadUsers"
+createFreshdeskUser = require "../../../../../lib/Model/FreshdeskUser"
+sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
-describe "DownloadUsers", ->
-  binding = null; knex = null; bookshelf = null; logger = null; User = null; task = null; # shared between tests
+describe "FreshdeskDownloadUsers", ->
+  binding = null; knex = null; bookshelf = null; logger = null; FreshdeskUser = null; task = null; # shared between tests
 
   before (beforeDone) ->
     knex = createKnex settings.knex
     bookshelf = createBookshelf knex
     logger = createLogger settings.logger
-    User = createUser bookshelf
+    FreshdeskUser = createFreshdeskUser bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
-    .then -> User.createTable()
+    .then -> FreshdeskUser.createTable()
     .nodeify beforeDone
 
   after (teardownDone) ->
@@ -29,15 +29,15 @@ describe "DownloadUsers", ->
     .nodeify teardownDone
 
   beforeEach ->
-    binding = new Binding(
+    binding = new FreshdeskBinding(
       credential: settings.credentials.denis
     )
-    task = new DownloadUsers(
-      ReadUsers:
+    task = new FreshdeskDownloadUsers(
+      FreshdeskReadUsers:
         input:
           avatarId: "wuXMSggRPPmW4FiE9"
           params: {}
-      SaveUsers:
+      FreshdeskSaveUsers:
         input:
           avatarId: "wuXMSggRPPmW4FiE9"
           params: {}
@@ -53,14 +53,14 @@ describe "DownloadUsers", ->
 
   it "should run", ->
     new Promise (resolve, reject) ->
-      nock.back "test/fixtures/ReadUsersNormalOperation.json", (recordingDone) ->
+      nock.back "test/fixtures/FreshdeskReadUsers/normal.json", (recordingDone) ->
         task.execute()
         .then ->
-          knex(User::tableName).count("id")
+          knex(FreshdeskUser::tableName).count("id")
           .then (results) ->
             results[0].count.should.be.equal("934")
         .then ->
-          User.where({email: "a.sweno@hotmail.com"}).fetch()
+          FreshdeskUser.where({email: "a.sweno@hotmail.com"}).fetch()
           .then (model) ->
             should.exist(model)
             model.get("email").should.be.equal("a.sweno@hotmail.com")

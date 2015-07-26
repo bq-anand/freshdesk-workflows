@@ -6,22 +6,22 @@ createKnex = require "../../../../../core/helper/knex"
 createBookshelf = require "../../../../../core/helper/bookshelf"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
-SaveUsers = require "../../../../../lib/Task/ActivityTask/Save/SaveUsers"
-createUser = require "../../../../../lib/Model/User"
-sample = require "#{process.env.ROOT_DIR}/test/fixtures/SaveUsers/sample.json"
+FreshdeskSaveUsers = require "../../../../../lib/Task/ActivityTask/Save/FreshdeskSaveUsers"
+createFreshdeskUser = require "../../../../../lib/Model/FreshdeskUser"
+sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
-describe "SaveUsers", ->
-  knex = null; bookshelf = null; logger = null; User = null; task = null; # shared between tests
+describe "FreshdeskSaveUsers", ->
+  knex = null; bookshelf = null; logger = null; FreshdeskUser = null; task = null; # shared between tests
 
   before (beforeDone) ->
     knex = createKnex settings.knex
     knex.Promise.longStackTraces()
     bookshelf = createBookshelf knex
     logger = createLogger settings.logger
-    User = createUser bookshelf
+    FreshdeskUser = createFreshdeskUser bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
-    .then -> User.createTable()
+    .then -> FreshdeskUser.createTable()
     .nodeify beforeDone
 
   after (teardownDone) ->
@@ -29,7 +29,7 @@ describe "SaveUsers", ->
     .nodeify teardownDone
 
   beforeEach ->
-    task = new SaveUsers(
+    task = new FreshdeskSaveUsers(
       avatarId: "wuXMSggRPPmW4FiE9"
     ,
       {}
@@ -45,10 +45,10 @@ describe "SaveUsers", ->
     task.in.end()
     task.execute()
     .then ->
-      knex(User::tableName).count("id")
+      knex(FreshdeskUser::tableName).count("id")
       .then (results) ->
         results[0].count.should.be.equal("1")
     .then ->
-      User.where({id: 1}).fetch()
+      FreshdeskUser.where({id: 1}).fetch()
       .then (model) ->
         model.get("email").should.be.equal("example@example.com")

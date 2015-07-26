@@ -6,17 +6,17 @@ createKnex = require "../../core/helper/knex"
 createBookshelf = require "../../core/helper/bookshelf"
 settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
-Serializer = require "../../lib/Serializer"
-createUser = require "../../lib/Model/User"
-sample = require "#{process.env.ROOT_DIR}/test/fixtures/SaveUsers/sample.json"
+FreshdeskSerializer = require "../../lib/FreshdeskSerializer"
+createFreshdeskUser = require "../../lib/Model/FreshdeskUser"
+sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
-describe "Serializer", ->
-  serializer = null; knex = null; User = null;
+describe "FreshdeskSerializer", ->
+  serializer = null; knex = null; FreshdeskUser = null;
 
   before (beforeDone) ->
     knex = createKnex settings.knex
     bookshelf = createBookshelf knex
-    User = createUser bookshelf
+    FreshdeskUser = createFreshdeskUser bookshelf
     beforeDone()
 
   after (teardownDone) ->
@@ -24,8 +24,8 @@ describe "Serializer", ->
     .nodeify teardownDone
 
   beforeEach ->
-    serializer = new Serializer
-      model: User
+    serializer = new FreshdeskSerializer
+      model: FreshdeskUser
 
   it "should be idempotent", ->
     sampleMirror = serializer.toExternal(serializer.toInternal(sample))

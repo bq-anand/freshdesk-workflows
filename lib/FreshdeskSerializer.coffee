@@ -1,9 +1,9 @@
 _ = require "underscore"
 _.mixin require "underscore.deep"
 moment = require "moment"
-BaseSerializer = require "../core/lib/Serializer"
+Serializer = require "../core/lib/Serializer"
 
-class Serializer extends BaseSerializer
+class FreshdeskSerializer extends Serializer
   constructor: (options) ->
     super
 
@@ -15,4 +15,4 @@ class Serializer extends BaseSerializer
   fromDate: (value) -> moment(value).utcOffset(-4).format(@dateFormat())
   dateFormat: -> "YYYY-MM-DDTHH:mm:ssZ"
 
-module.exports = Serializer
+module.exports = FreshdeskSerializer
