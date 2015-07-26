@@ -10,7 +10,6 @@ class DownloadUsers extends Download
     Match.check input,
       ReadUsers: Object
       SaveUsers: Object
-    console.log input.ReadUsers
     super input, options, _.extend {}, dependencies,
       read: new ReadUsers input.ReadUsers.input, input.ReadUsers, dependencies
       save: new SaveUsers input.SaveUsers.input, input.ReadUsers, dependencies
