@@ -7,7 +7,7 @@ createBookshelf = require "../../../../../core/helper/bookshelf"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 FreshdeskSaveUsers = require "../../../../../lib/Task/ActivityTask/Save/FreshdeskSaveUsers"
-createFreshdeskUser = require "../../../../../lib/Model/FreshdeskUser"
+createFreshdeskUsers = require "../../../../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskSaveUsers", ->
@@ -18,7 +18,7 @@ describe "FreshdeskSaveUsers", ->
     knex.Promise.longStackTraces()
     bookshelf = createBookshelf knex
     logger = createLogger settings.logger
-    FreshdeskUser = createFreshdeskUser bookshelf
+    FreshdeskUser = createFreshdeskUsers bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> FreshdeskUser.createTable()

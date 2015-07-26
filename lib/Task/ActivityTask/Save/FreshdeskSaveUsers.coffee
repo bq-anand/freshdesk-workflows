@@ -1,9 +1,9 @@
 UpsertThroughTemporaryTable = require "../../../../core/lib/Task/ActivityTask/Save/UpsertThroughTemporaryTable"
-createFreshdeskUser = require "../../../Model/FreshdeskUser"
+createFreshdeskUsers = require "../../../Model/FreshdeskUsers"
 FreshdeskSerializer = require "../../../FreshdeskSerializer"
 
 class FreshdeskSaveUsers extends UpsertThroughTemporaryTable
-  createModel: -> createFreshdeskUser(@bookshelf)
+  createModel: -> createFreshdeskUsers(@bookshelf)
   createSerializer: -> new FreshdeskSerializer({model: @model})
 
 module.exports = FreshdeskSaveUsers

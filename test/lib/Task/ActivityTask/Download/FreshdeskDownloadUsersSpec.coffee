@@ -8,7 +8,7 @@ settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_D
 
 FreshdeskBinding = require "../../../../../lib/FreshdeskBinding"
 FreshdeskDownloadUsers = require "../../../../../lib/Task/ActivityTask/Download/FreshdeskDownloadUsers"
-createFreshdeskUser = require "../../../../../lib/Model/FreshdeskUser"
+createFreshdeskUsers = require "../../../../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskDownloadUsers", ->
@@ -18,7 +18,7 @@ describe "FreshdeskDownloadUsers", ->
     knex = createKnex settings.knex
     bookshelf = createBookshelf knex
     logger = createLogger settings.logger
-    FreshdeskUser = createFreshdeskUser bookshelf
+    FreshdeskUser = createFreshdeskUsers bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> FreshdeskUser.createTable()

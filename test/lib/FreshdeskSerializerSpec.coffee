@@ -7,7 +7,7 @@ createBookshelf = require "../../core/helper/bookshelf"
 settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 FreshdeskSerializer = require "../../lib/FreshdeskSerializer"
-createFreshdeskUser = require "../../lib/Model/FreshdeskUser"
+createFreshdeskUsers = require "../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskSerializer", ->
@@ -16,7 +16,7 @@ describe "FreshdeskSerializer", ->
   before (beforeDone) ->
     knex = createKnex settings.knex
     bookshelf = createBookshelf knex
-    FreshdeskUser = createFreshdeskUser bookshelf
+    FreshdeskUser = createFreshdeskUsers bookshelf
     beforeDone()
 
   after (teardownDone) ->
