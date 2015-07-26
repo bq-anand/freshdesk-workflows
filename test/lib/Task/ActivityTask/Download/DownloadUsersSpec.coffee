@@ -34,9 +34,15 @@ describe "DownloadUsers", ->
     )
     task = new DownloadUsers(
       ReadUsers:
-        avatarId: "wuXMSggRPPmW4FiE9"
+        input:
+          avatarId: "wuXMSggRPPmW4FiE9"
+          params: {}
       SaveUsers:
-        avatarId: "wuXMSggRPPmW4FiE9"
+        input:
+          avatarId: "wuXMSggRPPmW4FiE9"
+          params: {}
+    ,
+      {}
     ,
       in: new stream.PassThrough({objectMode: true})
       out: new stream.PassThrough({objectMode: true})

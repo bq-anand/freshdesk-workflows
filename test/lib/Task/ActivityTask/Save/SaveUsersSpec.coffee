@@ -32,6 +32,8 @@ describe "SaveUsers", ->
     task = new SaveUsers(
       avatarId: "wuXMSggRPPmW4FiE9"
     ,
+      {}
+    ,
       in: new stream.PassThrough({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
       bookshelf: bookshelf

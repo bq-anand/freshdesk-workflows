@@ -18,6 +18,8 @@ describe "ReadUsers", ->
     task = new ReadUsers(
       params: {}
     ,
+      {}
+    ,
       in: new stream.Readable({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
       binding: binding
