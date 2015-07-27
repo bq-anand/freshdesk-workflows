@@ -1,9 +1,7 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-createLogger = require "../../../../../core/helper/logger"
-createKnex = require "../../../../../core/helper/knex"
-createBookshelf = require "../../../../../core/helper/bookshelf"
+createDependencies = require "../../../../../core/test-helper/dependencies"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 FreshdeskSaveUsers = require "../../../../../lib/Task/ActivityTask/Save/FreshdeskSaveUsers"
@@ -11,22 +9,21 @@ createFreshdeskUsers = require "../../../../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskSaveUsers", ->
-  knex = null; bookshelf = null; logger = null; FreshdeskUser = null; task = null; # shared between tests
+  dependencies = createDependencies(settings)
+  knex = dependencies.knex; bookshelf = dependencies.bookshelf
 
-  before (beforeDone) ->
-    knex = createKnex settings.knex
-    knex.Promise.longStackTraces()
-    bookshelf = createBookshelf knex
-    logger = createLogger settings.logger
+  FreshdeskUser = null;
+
+  task = null; # shared between tests
+
+  before ->
     FreshdeskUser = createFreshdeskUsers bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> FreshdeskUser.createTable()
-    .nodeify beforeDone
 
-  after (teardownDone) ->
+  after ->
     knex.destroy()
-    .nodeify teardownDone
 
   beforeEach ->
     task = new FreshdeskSaveUsers(
@@ -34,10 +31,10 @@ describe "FreshdeskSaveUsers", ->
     ,
       {}
     ,
-      logger: logger
-      bookshelf: bookshelf
       in: new stream.PassThrough({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
+    ,
+      dependencies
     )
 
   it "should run", ->

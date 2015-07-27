@@ -1,10 +1,7 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-createLogger = require "../../../../../core/helper/logger"
-createKnex = require "../../../../../core/helper/knex"
-createBookshelf = require "../../../../../core/helper/bookshelf"
-createMongoDB = require "../../../../../core/helper/mongodb"
+createDependencies = require "../../../../../core/test-helper/dependencies"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 FreshdeskBinding = require "../../../../../lib/FreshdeskBinding"
@@ -13,11 +10,8 @@ createFreshdeskUsers = require "../../../../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskDownloadUsers", ->
-  logger = createLogger settings.logger
-  knex = createKnex settings.knex
-  knex.Promise.longStackTraces()
-  bookshelf = createBookshelf knex
-  mongodb = createMongoDB settings.mongodb
+  dependencies = createDependencies(settings)
+  knex = dependencies.knex; bookshelf = dependencies.bookshelf; mongodb = dependencies.mongodb
 
   FreshdeskUser = createFreshdeskUsers bookshelf
 
@@ -46,11 +40,10 @@ describe "FreshdeskDownloadUsers", ->
     ,
       {}
     ,
-      logger: logger
-      bookshelf: bookshelf
-      mongodb: mongodb
       in: new stream.PassThrough({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
+    ,
+      dependencies
     )
     Promise.all [
       Credentials.insert

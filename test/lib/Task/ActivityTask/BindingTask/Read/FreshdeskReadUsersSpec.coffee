@@ -1,16 +1,15 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-createMongoDB = require "../../../../../../core/helper/mongodb"
-createLogger = require "../../../../../../core/helper/logger"
+createDependencies = require "../../../../../../core/test-helper/dependencies"
 settings = (require "../../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
+
 FreshdeskReadUsers = require "../../../../../../lib/Task/ActivityTask/BindingTask/Read/FreshdeskReadUsers"
 
 describe "FreshdeskReadUsers", ->
-  logger = createLogger settings.logger
-  mongodb = createMongoDB settings.mongodb
+  dependencies = createDependencies(settings)
 
-  Credentials = mongodb.collection("Credentials")
+  Credentials = dependencies.mongodb.collection("Credentials")
 
   task = null;
 
@@ -23,10 +22,10 @@ describe "FreshdeskReadUsers", ->
     ,
       {}
     ,
-      logger: logger
-      mongodb: mongodb
       in: new stream.Readable({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
+    ,
+      dependencies
     )
     Promise.all [
       Credentials.insert

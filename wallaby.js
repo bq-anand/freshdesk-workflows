@@ -7,9 +7,9 @@ var config = function(local, wallaby) {
     testFramework: "mocha",
     files: [
       "!test/**/*Spec.coffee",
-      "**/helper/**/*.coffee",
       "**/lib/**/*.coffee",
-      "test/helpers.coffee",
+      "**/helper/**/*.coffee",
+      "**/test-helper/**/*.coffee",
       "test/mocha.coffee",
       "test/config.json"
     ],
