@@ -2,7 +2,7 @@ _ = require "underscore"
 Promise = require "bluebird"
 Match = require "mtr-match"
 Download = require "../../../../core/lib/Task/ActivityTask/Download"
-FreshdeskReadUsers = require "../Read/FreshdeskReadUsers"
+FreshdeskReadUsers = require "../BindingTask/Read/FreshdeskReadUsers"
 FreshdeskSaveUsers = require "../Save/FreshdeskSaveUsers"
 
 class FreshdeskDownloadUsers extends Download

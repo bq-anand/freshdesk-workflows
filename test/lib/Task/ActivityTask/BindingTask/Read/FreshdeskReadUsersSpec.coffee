@@ -1,30 +1,45 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-createLogger = require "../../../../../core/helper/logger"
-settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
-FreshdeskBinding = require "../../../../../lib/FreshdeskBinding"
-FreshdeskReadUsers = require "../../../../../lib/Task/ActivityTask/Read/FreshdeskReadUsers"
+createMongoDB = require "../../../../../../core/helper/mongodb"
+createLogger = require "../../../../../../core/helper/logger"
+settings = (require "../../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
+FreshdeskReadUsers = require "../../../../../../lib/Task/ActivityTask/BindingTask/Read/FreshdeskReadUsers"
 
 describe "FreshdeskReadUsers", ->
-  binding = null; logger = null; task = null;
+  logger = createLogger settings.logger
+  mongodb = createMongoDB settings.mongodb
+
+  Credentials = mongodb.collection("Credentials")
+
+  task = null;
 
   before ->
-    binding = new FreshdeskBinding
-      credential: settings.credentials.denis
-    logger = createLogger settings.logger
 
   beforeEach ->
     task = new FreshdeskReadUsers(
+      avatarId: "eeEKAkvE7ooC78P9Z"
       params: {}
     ,
       {}
     ,
+      logger: logger
+      mongodb: mongodb
       in: new stream.Readable({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
-      binding: binding
-      logger: logger
     )
+    Promise.all [
+      Credentials.insert
+        avatarId: "eeEKAkvE7ooC78P9Z"
+        api: "Freshdesk"
+        scopes: ["*"]
+        details: settings.credentials["Freshdesk"]["Denis"]
+    ]
+
+  afterEach ->
+    Promise.all [
+      Credentials.remove()
+    ]
 
   it "should run", ->
     @timeout(10000) if process.env.NOCK_BACK_MODE is "record"

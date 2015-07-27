@@ -9,8 +9,10 @@ describe "FreshdeskBinding", ->
   binding = null
 
   beforeEach ->
-    binding = new FreshdeskBinding
-      credential: settings.credentials.denis
+    binding = new FreshdeskBinding({scopes: ["*"]})
+    binding.setCredential(
+      details: settings.credentials["Freshdesk"]["Denis"]
+    )
 
   it "binding.getUsers() :: GET /contacts.json", ->
     new Promise (resolve, reject) ->

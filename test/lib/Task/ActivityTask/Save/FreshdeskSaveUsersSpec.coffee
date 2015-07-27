@@ -34,10 +34,10 @@ describe "FreshdeskSaveUsers", ->
     ,
       {}
     ,
+      logger: logger
+      bookshelf: bookshelf
       in: new stream.PassThrough({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
-      bookshelf: bookshelf
-      logger: logger
     )
 
   it "should run", ->
