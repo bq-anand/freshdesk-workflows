@@ -5,10 +5,10 @@
     "defaultTaskList": {
       "name": "FreshdeskReadUsers"
     },
-    "defaultTaskHeartbeatTimeout": "600000",
+    "defaultTaskHeartbeatTimeout": "600",
     "defaultTaskPriority": "0",
-    "defaultTaskScheduleToStartTimeout": "1800000",
-    "defaultTaskStartToCloseTimeout": "600000",
+    "defaultTaskScheduleToStartTimeout": "1800",
+    "defaultTaskStartToCloseTimeout": "600",
     "defaultTaskScheduleToCloseTimeout": "NONE",
     "description": ""
   },
@@ -18,10 +18,10 @@
     "defaultTaskList": {
       "name": "FreshdeskSaveUsers"
     },
-    "defaultTaskHeartbeatTimeout": "600000",
+    "defaultTaskHeartbeatTimeout": "600",
     "defaultTaskPriority": "0",
-    "defaultTaskScheduleToStartTimeout": "1800000",
-    "defaultTaskStartToCloseTimeout": "600000",
+    "defaultTaskScheduleToStartTimeout": "1800",
+    "defaultTaskStartToCloseTimeout": "600",
     "defaultTaskScheduleToCloseTimeout": "NONE",
     "description": ""
   },
@@ -31,10 +31,10 @@
     "defaultTaskList": {
       "name": "FreshdeskDownloadUsers"
     },
-    "defaultTaskHeartbeatTimeout": "600000",
+    "defaultTaskHeartbeatTimeout": "600",
     "defaultTaskPriority": "0",
-    "defaultTaskScheduleToStartTimeout": "1800000",
-    "defaultTaskStartToCloseTimeout": "600000",
+    "defaultTaskScheduleToStartTimeout": "1800",
+    "defaultTaskStartToCloseTimeout": "600",
     "defaultTaskScheduleToCloseTimeout": "NONE",
     "description": ""
   }
