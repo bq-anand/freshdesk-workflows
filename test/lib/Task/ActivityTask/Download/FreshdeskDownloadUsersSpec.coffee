@@ -1,7 +1,7 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-createDependencies = require "../../../../../core/test-helper/dependencies"
+createDependencies = require "../../../../../core/helper/dependencies"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 FreshdeskBinding = require "../../../../../lib/FreshdeskBinding"
@@ -13,9 +13,9 @@ describe "FreshdeskDownloadUsers", ->
   dependencies = createDependencies(settings)
   knex = dependencies.knex; bookshelf = dependencies.bookshelf; mongodb = dependencies.mongodb
 
-  FreshdeskUser = createFreshdeskUsers bookshelf
-
   Credentials = mongodb.collection("Credentials")
+
+  FreshdeskUser = createFreshdeskUsers bookshelf
 
   task = null; # shared between tests
 
