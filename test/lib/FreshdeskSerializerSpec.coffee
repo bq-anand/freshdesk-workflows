@@ -16,9 +16,8 @@ describe "FreshdeskSerializer", ->
 
   serializer = null
 
-  after (teardownDone) ->
+  after ->
     knex.destroy()
-    .nodeify teardownDone
 
   beforeEach ->
     serializer = new FreshdeskSerializer
