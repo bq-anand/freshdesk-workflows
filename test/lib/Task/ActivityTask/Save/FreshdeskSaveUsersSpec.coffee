@@ -12,12 +12,11 @@ describe "FreshdeskSaveUsers", ->
   dependencies = createDependencies(settings)
   knex = dependencies.knex; bookshelf = dependencies.bookshelf
 
-  FreshdeskUser = null;
+  FreshdeskUser = createFreshdeskUsers bookshelf
 
   task = null; # shared between tests
 
   before ->
-    FreshdeskUser = createFreshdeskUsers bookshelf
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
     .then -> FreshdeskUser.createTable()

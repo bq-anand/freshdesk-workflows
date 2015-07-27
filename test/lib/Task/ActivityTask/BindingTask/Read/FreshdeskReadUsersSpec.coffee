@@ -8,8 +8,9 @@ FreshdeskReadUsers = require "../../../../../../lib/Task/ActivityTask/BindingTas
 
 describe "FreshdeskReadUsers", ->
   dependencies = createDependencies(settings)
+  mongodb = dependencies.mongodb;
 
-  Credentials = dependencies.mongodb.collection("Credentials")
+  Credentials = mongodb.collection("Credentials")
 
   task = null;
 

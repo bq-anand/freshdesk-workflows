@@ -1,9 +1,7 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-createLogger = require "../../core/helper/logger"
-createKnex = require "../../core/helper/knex"
-createBookshelf = require "../../core/helper/bookshelf"
+createDependencies = require "../../core/test-helper/dependencies"
 settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
 FreshdeskSerializer = require "../../lib/FreshdeskSerializer"
@@ -11,13 +9,12 @@ createFreshdeskUsers = require "../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskSerializer", ->
-  serializer = null; knex = null; FreshdeskUser = null;
+  dependencies = createDependencies(settings)
+  knex = dependencies.knex; bookshelf = dependencies.bookshelf
 
-  before (beforeDone) ->
-    knex = createKnex settings.knex
-    bookshelf = createBookshelf knex
-    FreshdeskUser = createFreshdeskUsers bookshelf
-    beforeDone()
+  FreshdeskUsers = createFreshdeskUsers bookshelf
+
+  serializer = null
 
   after (teardownDone) ->
     knex.destroy()
@@ -25,7 +22,7 @@ describe "FreshdeskSerializer", ->
 
   beforeEach ->
     serializer = new FreshdeskSerializer
-      model: FreshdeskUser
+      model: FreshdeskUsers
 
   it "should be idempotent", ->
     sampleMirror = serializer.toExternal(serializer.toInternal(sample))
