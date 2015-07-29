@@ -76,6 +76,8 @@ describe "FreshdeskDownloadUsers", ->
   afterEach ->
 
   it "should run", ->
+    @timeout(6000)
+    @slow(4000)
     new Promise (resolve, reject) ->
       nock.back "test/fixtures/FreshdeskReadUsers/normal.json", (recordingDone) ->
         task.execute()
