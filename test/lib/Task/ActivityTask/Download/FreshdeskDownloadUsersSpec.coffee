@@ -1,6 +1,7 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
+input = require "../../../../../core/test-helper/input"
 createDependencies = require "../../../../../core/helper/dependencies"
 settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
 
@@ -10,10 +11,12 @@ createFreshdeskUsers = require "../../../../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskDownloadUsers", ->
-  dependencies = createDependencies(settings)
+  dependencies = createDependencies(settings, "FreshdeskDownloadUsers")
   knex = dependencies.knex; bookshelf = dependencies.bookshelf; mongodb = dependencies.mongodb
 
   Credentials = mongodb.collection("Credentials")
+  Commands = mongodb.collection("Commands")
+  Issues = mongodb.collection("Issues")
 
   FreshdeskUser = createFreshdeskUsers bookshelf
 
@@ -29,14 +32,16 @@ describe "FreshdeskDownloadUsers", ->
 
   beforeEach ->
     task = new FreshdeskDownloadUsers(
-      FreshdeskReadUsers:
-        input:
-          avatarId: "wuXMSggRPPmW4FiE9"
-          params: {}
-      FreshdeskSaveUsers:
-        input:
-          avatarId: "wuXMSggRPPmW4FiE9"
-          params: {}
+      _.defaults
+        FreshdeskReadUsers:
+          input:
+            avatarId: input.avatarId
+            params: {}
+        FreshdeskSaveUsers:
+          input:
+            avatarId: input.avatarId
+            params: {}
+      , input
     ,
       {}
     ,
@@ -45,18 +50,30 @@ describe "FreshdeskDownloadUsers", ->
     ,
       dependencies
     )
-    Promise.all [
-      Credentials.insert
-        avatarId: "eeEKAkvE7ooC78P9Z"
-        api: "Freshdesk"
-        scopes: ["*"]
-        details: settings.credentials["Freshdesk"]["Denis"]
-    ]
+    Promise.bind(@)
+    .then ->
+      Promise.all [
+        Credentials.remove()
+        Commands.remove()
+        Issues.remove()
+      ]
+    .then ->
+      Promise.all [
+        Credentials.insert
+          avatarId: task.avatarId
+          api: "Freshdesk"
+          scopes: ["*"]
+          details: settings.credentials["Freshdesk"]["Denis"]
+        Commands.insert
+          _id: task.commandId
+          progressBars: [
+            activityId: "FreshdeskReadUsers", isStarted: true, isFinished: false
+          ,
+            activityId: "FreshdeskSaveUsers", isStarted: true, isFinished: false
+          ]
+      ]
 
   afterEach ->
-    Promise.all [
-      Credentials.remove()
-    ]
 
   it "should run", ->
     new Promise (resolve, reject) ->
@@ -71,6 +88,13 @@ describe "FreshdeskDownloadUsers", ->
           .then (model) ->
             should.exist(model)
             model.get("email").should.be.equal("a.sweno@hotmail.com")
+        .then ->
+          Commands.findOne(task.commandId)
+          .then (command) ->
+            command.progressBars[0].total.should.be.equal(0)
+            command.progressBars[0].current.should.be.equal(934)
+            command.progressBars[1].total.should.be.equal(0)
+            command.progressBars[1].current.should.be.equal(934)
         .then resolve
         .catch reject
         .finally recordingDone

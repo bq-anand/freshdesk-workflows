@@ -9,7 +9,7 @@ createFreshdeskUsers = require "../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskSerializer", ->
-  dependencies = createDependencies(settings)
+  dependencies = createDependencies(settings, "FreshdeskSerializer")
   knex = dependencies.knex; bookshelf = dependencies.bookshelf
 
   FreshdeskUsers = createFreshdeskUsers bookshelf

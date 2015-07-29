@@ -7,12 +7,14 @@ FreshdeskSaveUsers = require "../Save/FreshdeskSaveUsers"
 
 class FreshdeskDownloadUsers extends Download
   constructor: (input, options, streams, dependencies) ->
-    Match.check input,
+    Match.check input, Match.ObjectIncluding
       FreshdeskReadUsers: Object
       FreshdeskSaveUsers: Object
+    readArguments = @arguments input, "FreshdeskReadUsers"
+    saveArguments = @arguments input, "FreshdeskSaveUsers"
     _.extend @,
-      read: new FreshdeskReadUsers input.FreshdeskReadUsers.input, input.FreshdeskReadUsers, streams, dependencies
-      save: new FreshdeskSaveUsers input.FreshdeskSaveUsers.input, input.FreshdeskReadUsers, streams, dependencies
+      read: new FreshdeskReadUsers readArguments.input, readArguments.options, streams, dependencies
+      save: new FreshdeskSaveUsers saveArguments.input, saveArguments.options, streams, dependencies
     super
 
 
