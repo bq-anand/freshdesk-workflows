@@ -3,9 +3,9 @@
   "credentials": {
     "Freshdesk": {
       "Generic": {
-        "domain": "Define this key in dev.local.json",
-        "username": "Define this key in dev.local.json",
-        "password": "Define this key in dev.local.json"
+        "domain": "Define this key in dev.specific.json or dev.local.json",
+        "username": "Define this key in dev.specific.json or dev.local.json",
+        "password": "Define this key in dev.specific.json or dev.local.json"
       }
     }
   },
@@ -33,8 +33,8 @@
     "url": "mongodb://localhost/%database%"
   },
   "swf": {
-    "accessKeyId": "Define this key in dev.local.json",
-    "secretAccessKey": "Define this key in dev.local.json",
-    "region": "Define this key in dev.local.json"
+    "accessKeyId": "Define this key in dev.specific.json or dev.local.json",
+    "secretAccessKey": "Define this key in dev.specific.json or dev.local.json",
+    "region": "Define this key in dev.specific.json or dev.local.json"
   }
 }
