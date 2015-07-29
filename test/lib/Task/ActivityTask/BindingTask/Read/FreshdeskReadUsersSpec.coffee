@@ -45,7 +45,7 @@ describe "FreshdeskReadUsers", ->
           avatarId: task.avatarId
           api: "Freshdesk"
           scopes: ["*"]
-          details: settings.credentials["Freshdesk"]["Denis"]
+          details: settings.credentials["Freshdesk"]["Generic"]
         Commands.insert
           _id: input.commandId
           progressBars: [

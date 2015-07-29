@@ -1,1 +1,40 @@
-/home/starfall/Dropbox/workspace/fixin/repositories/freshdesk-workflows/settings/dev.json
+{
+  "isDebug": true,
+  "credentials": {
+    "Freshdesk": {
+      "Generic": {
+        "domain": "Define this key in dev.local.json",
+        "username": "Define this key in dev.local.json",
+        "password": "Define this key in dev.local.json"
+      }
+    }
+  },
+  "logger": {
+    "transports": {
+      "Console": {
+        "silent": true,
+        "level": "info",
+        "handleExceptions": false,
+        "prettyPrint": true,
+        "colorize": true,
+        "showLevel": false
+      }
+    }
+  },
+  "knex": {
+    "client": "pg",
+    "connection": "postgres://fixin:fixin@localhost/fixin_local",
+    "pool": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "mongodb": {
+    "url": "mongodb://localhost/%database%"
+  },
+  "swf": {
+    "accessKeyId": "Define this key in dev.local.json",
+    "secretAccessKey": "Define this key in dev.local.json",
+    "region": "Define this key in dev.local.json"
+  }
+}

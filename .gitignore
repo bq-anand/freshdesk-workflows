@@ -1,2 +1,4 @@
 node_modules
 wallaby.local.js
+settings-local
+settings/*.local.json

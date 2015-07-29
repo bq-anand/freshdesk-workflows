@@ -11,7 +11,7 @@ describe "FreshdeskBinding", ->
   beforeEach ->
     binding = new FreshdeskBinding({scopes: ["*"]})
     binding.setCredential(
-      details: settings.credentials["Freshdesk"]["Denis"]
+      details: settings.credentials["Freshdesk"]["Generic"]
     )
 
   it "binding.getUsers() :: GET /contacts.json", ->
