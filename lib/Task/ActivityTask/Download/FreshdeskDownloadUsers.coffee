@@ -17,5 +17,4 @@ class FreshdeskDownloadUsers extends Download
       save: new FreshdeskSaveUsers saveArguments.input, saveArguments.options, streams, dependencies
     super
 
-
 module.exports = FreshdeskDownloadUsers
