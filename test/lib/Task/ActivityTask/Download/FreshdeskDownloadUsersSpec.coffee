@@ -43,7 +43,7 @@ describe "FreshdeskDownloadUsers", ->
             params: {}
       , input
     ,
-      {}
+      activityId: "FreshdeskDownloadUsers"
     ,
       in: new stream.PassThrough({objectMode: true})
       out: new stream.PassThrough({objectMode: true})
@@ -67,9 +67,7 @@ describe "FreshdeskDownloadUsers", ->
         Commands.insert
           _id: task.commandId
           progressBars: [
-            activityId: "FreshdeskReadUsers", isStarted: true, isFinished: false
-          ,
-            activityId: "FreshdeskSaveUsers", isStarted: true, isFinished: false
+            activityId: "FreshdeskDownloadUsers", isStarted: true, isFinished: false
           ]
       ]
 
@@ -93,10 +91,7 @@ describe "FreshdeskDownloadUsers", ->
         .then ->
           Commands.findOne(task.commandId)
           .then (command) ->
-            command.progressBars[0].total.should.be.equal(0)
-            command.progressBars[0].current.should.be.equal(934)
-            command.progressBars[1].total.should.be.equal(0)
-            command.progressBars[1].current.should.be.equal(934)
+            command.progressBars[0].should.be.deep.equal activityId: "FreshdeskDownloadUsers", total: 0, current: 934, isStarted: true, isFinished: false
         .then resolve
         .catch reject
         .finally recordingDone
