@@ -13,7 +13,7 @@ describe "FreshdeskSaveUsers", ->
   dependencies = createDependencies(settings, "FreshdeskSaveUsers")
   knex = dependencies.knex; bookshelf = dependencies.bookshelf; mongodb = dependencies.mongodb;
 
-  FreshdeskUser = createFreshdeskUsers bookshelf
+  FreshdeskUsers = createFreshdeskUsers bookshelf
 
   Commands = mongodb.collection("Commands")
   Issues = mongodb.collection("Issues")
@@ -23,7 +23,7 @@ describe "FreshdeskSaveUsers", ->
   before ->
     Promise.bind(@)
     .then -> knex.raw("SET search_path TO pg_temp")
-    .then -> FreshdeskUser.createTable()
+    .then -> FreshdeskUsers.createTable()
 
   after ->
     knex.destroy()
@@ -42,6 +42,7 @@ describe "FreshdeskSaveUsers", ->
     Promise.bind(@)
     .then ->
       Promise.all [
+        knex.truncate(FreshdeskUsers::tableName)
         Commands.remove()
         Issues.remove()
       ]
@@ -50,24 +51,54 @@ describe "FreshdeskSaveUsers", ->
         Commands.insert
           _id: input.commandId
           progressBars: [
-            activityId: "FreshdeskSaveUsers", isStarted: true, isFinished: false
+            activityId: "FreshdeskSaveUsers", isStarted: true, isCompleted: false, isFailed: false
           ]
+          isStarted: true, isCompleted: false, isFailed: false
       ]
 
-  it "should run", ->
+  it "should save new objects", ->
     task.in.write(sample)
     task.in.end()
     task.execute()
     .then ->
-      knex(FreshdeskUser::tableName).count("id")
+      knex(FreshdeskUsers::tableName).count("id")
       .then (results) ->
         results[0].count.should.be.equal("1")
     .then ->
-      FreshdeskUser.where({id: 1}).fetch()
+      FreshdeskUsers.where({email: "example@example.com"}).fetch()
       .then (model) ->
-        model.get("email").should.be.equal("example@example.com")
+        should.exist(model)
     .then ->
       Commands.findOne(input.commandId)
       .then (command) ->
         command.progressBars[0].total.should.be.equal(0)
         command.progressBars[0].current.should.be.equal(1)
+
+  it "should update existing objects", ->
+    task.in.write(sample)
+    task.in.end()
+    task.execute()
+    .then ->
+      task = new FreshdeskSaveUsers(
+        _.defaults {}, input
+      ,
+        activityId: "FreshdeskSaveUsers"
+      ,
+        in: new stream.PassThrough({objectMode: true})
+        out: new stream.PassThrough({objectMode: true})
+      ,
+        dependencies
+      )
+      task.in.write _.defaults
+        "email": "another-example@example.com",
+      , sample
+      task.in.end()
+      task.execute()
+    .then ->
+      knex(FreshdeskUsers::tableName).count("id")
+      .then (results) ->
+        results[0].count.should.be.equal("1")
+    .then ->
+      FreshdeskUsers.where({email: "another-example@example.com"}).fetch()
+      .then (model) ->
+        should.exist(model)

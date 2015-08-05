@@ -49,8 +49,9 @@ describe "FreshdeskReadUsers", ->
         Commands.insert
           _id: input.commandId
           progressBars: [
-            activityId: "FreshdeskReadUsers", isStarted: true, isFinished: false
+            activityId: "FreshdeskReadUsers", isStarted: true, isCompleted: false, isFailed: false
           ]
+          isStarted: true, isCompleted: false, isFailed: false
       ]
 
   afterEach ->

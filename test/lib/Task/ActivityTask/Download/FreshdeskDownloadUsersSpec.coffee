@@ -67,8 +67,9 @@ describe "FreshdeskDownloadUsers", ->
         Commands.insert
           _id: task.commandId
           progressBars: [
-            activityId: "FreshdeskDownloadUsers", isStarted: true, isFinished: false
+            activityId: "FreshdeskDownloadUsers", isStarted: true, isCompleted: false, isFailed: false
           ]
+          isStarted: true, isCompleted: false, isFailed: false
       ]
 
   afterEach ->
@@ -91,7 +92,8 @@ describe "FreshdeskDownloadUsers", ->
         .then ->
           Commands.findOne(task.commandId)
           .then (command) ->
-            command.progressBars[0].should.be.deep.equal activityId: "FreshdeskDownloadUsers", total: 0, current: 934, isStarted: true, isFinished: false
+            command.progressBars[0].total.should.be.equal(0)
+            command.progressBars[0].current.should.be.equal(934)
         .then resolve
         .catch reject
         .finally recordingDone
