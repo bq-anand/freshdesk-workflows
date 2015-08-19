@@ -6,6 +6,10 @@ FreshdeskBinding = require "../../../../FreshdeskBinding"
 class FreshdeskReadUsers extends OptimisticLookahead
   createBinding: -> new FreshdeskBinding({scopes: ["*"]})
   shouldReadNextChapter: (response, body) -> _.isArray(body) and body.length
-  getPage: (page) -> @binding.getUsers({page: page})
+  getPage: (page) ->
+    selector = {page: page}
+    if @params.email
+      selector.query = "email is #{@params.email}"
+    @binding.getUsers(selector)
 
 module.exports = FreshdeskReadUsers
