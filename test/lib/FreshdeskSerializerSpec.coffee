@@ -2,7 +2,7 @@ _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
 createDependencies = require "../../core/helper/dependencies"
-settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
+settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/test.json")
 
 FreshdeskSerializer = require "../../lib/FreshdeskSerializer"
 createFreshdeskUsers = require "../../lib/Model/FreshdeskUsers"

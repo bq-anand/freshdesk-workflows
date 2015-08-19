@@ -1,7 +1,7 @@
 _ = require "underscore"
 Promise = require "bluebird"
 FreshdeskBinding = require "../../lib/FreshdeskBinding"
-settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/dev.json")
+settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/test.json")
 
 describe "FreshdeskBinding", ->
   @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
