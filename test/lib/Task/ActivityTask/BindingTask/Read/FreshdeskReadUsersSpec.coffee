@@ -72,64 +72,8 @@ describe "FreshdeskReadUsers", ->
         .then ->
           Commands.findOne(input.commandId)
           .then (command) ->
-            command.progressBars[0].total.should.be.equal(0)
+            should.not.exist(command.progressBars[0].total)
             command.progressBars[0].current.should.be.equal(934)
         .then resolve
         .catch reject
         .finally recordingDone
-
-  testgc = (func) ->
-    global.gc()
-    leakCounter = 0
-    trials = [1..20] # 10 isn't enough, as memory usage actually decreases during first runs
-    Promise.reduce trials, (previousRss) ->
-      func()
-      .then ->
-        global.gc()
-        currentRss = process.memoryUsage().rss
-        if currentRss > previousRss
-          leakCounter++
-          currentRss
-        else
-          previousRss
-    , process.memoryUsage().rss
-    .then (rssStats) ->
-      if leakCounter > trials.length / 3
-        throw new Error("Leak counter has been incremented #{leakCounter} times")
-
-  it "should report a leak for bad code", ->
-    new Promise (resolve, reject) ->
-      leaksink = []
-      leaker = ->
-        Promise.bind(@)
-        .then -> leaksink.push [1..100000]
-      # we expect the error
-      testgc(leaker)
-      .then -> reject(new Error("No error was thrown"))
-      .catch -> resolve()
-
-  it "shouldn't report a leak for good code", ->
-
-  it "shouldn't leak memory @gc", ->
-#    @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
-#    testgc ->
-#      new Promise (resolve, reject) ->
-#        nock.back "test/fixtures/FreshdeskReadUsers/normal.json", (recordingDone) ->
-#          sinon.spy(task.out, "write")
-#          sinon.spy(task.binding, "request")
-#          task.execute()
-#          .then resolve
-#          .catch reject
-#          .finally recordingDone
-#      task = new FreshdeskReadUsers(
-#        _.defaults
-#          params: {}
-#        , input
-#      ,
-#        activityId: "FreshdeskReadUsers"
-#      ,
-#        in: new stream.Readable({objectMode: true})
-#        out: new stream.Writable({objectMode: true})
-#      ,
-#        dependencies
-#      )

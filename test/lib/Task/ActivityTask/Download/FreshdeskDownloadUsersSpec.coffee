@@ -92,7 +92,7 @@ describe "FreshdeskDownloadUsers", ->
         .then ->
           Commands.findOne(task.commandId)
           .then (command) ->
-            command.progressBars[0].total.should.be.equal(0)
+            should.not.exist(command.progressBars[0].total)
             command.progressBars[0].current.should.be.equal(934)
         .then resolve
         .catch reject
