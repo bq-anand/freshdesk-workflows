@@ -18,7 +18,10 @@ var config = function(local, wallaby) {
     ],
     env: {
       type: "node",
-      runner: "node"
+      runner: "node",
+      params: {
+        runner: "--expose-gc"
+      }
     },
     bootstrap: function(wallaby) {
       var mocha = wallaby.testFramework;
