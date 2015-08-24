@@ -74,7 +74,7 @@ describe "FreshdeskDownloadUsers", ->
 
   afterEach ->
 
-  it "should run", ->
+  it "should run @fast", ->
     @timeout(6000)
     @slow(4000)
     new Promise (resolve, reject) ->

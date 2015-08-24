@@ -7,6 +7,7 @@ settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/setti
 FreshdeskSerializer = require "../../lib/FreshdeskSerializer"
 createFreshdeskUsers = require "../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
+MemoryLeakTester = require "../../core/lib/MemoryLeakTester"
 
 describe "FreshdeskSerializer", ->
   dependencies = createDependencies(settings, "FreshdeskSerializer")
@@ -23,12 +24,21 @@ describe "FreshdeskSerializer", ->
     serializer = new FreshdeskSerializer
       model: FreshdeskUsers
 
-  it "should be idempotent", ->
+  it "should be idempotent @fast", ->
     sampleMirror = serializer.toExternal(serializer.toInternal(sample))
     sample.should.be.deep.equal(sampleMirror)
 
-  it "should remap id to _uid", ->
+  it "should remap id to _uid @fast", ->
     serializer.toInternal(sample)._uid.should.be.equal(sample.id)
 
-  it "should transform created_at::string into created_at::Date", ->
+  it "should transform created_at::string into created_at::Date @fast", ->
     serializer.toInternal(sample).created_at.should.be.an.instanceof(Date)
+
+  it "shouldn't leak memory @slow", ->
+    @timeout(60000)
+    tester = new MemoryLeakTester(
+      runner: ->
+        serializer.toExternal(serializer.toInternal(sample))
+    )
+    tester.execute()
+    .then -> console.log tester.currentLoops

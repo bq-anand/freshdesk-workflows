@@ -56,7 +56,7 @@ describe "FreshdeskReadUsers", ->
 
   afterEach ->
 
-  it "should run", ->
+  it "should run @fast", ->
     @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
     new Promise (resolve, reject) ->
       nock.back "test/fixtures/FreshdeskReadUsers/normal.json", (recordingDone) ->

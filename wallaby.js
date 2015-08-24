@@ -26,6 +26,7 @@ var config = function(local, wallaby) {
     bootstrap: function(wallaby) {
       var mocha = wallaby.testFramework;
       mocha.ui("bdd");
+      mocha.grep(/@fast/);
       require.main.require("test/mocha");
       try {
         var local = require(wallaby.localProjectDir + "/wallaby.local"); // need to require again here, because bootstrap runs in another context

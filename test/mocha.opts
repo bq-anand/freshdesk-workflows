@@ -3,4 +3,4 @@
 --ui bdd
 --require test/mocha.coffee
 --compilers coffee:coffee-script/register
---expose-gc
+--grep @fast

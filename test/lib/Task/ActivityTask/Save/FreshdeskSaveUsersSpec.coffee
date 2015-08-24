@@ -56,7 +56,7 @@ describe "FreshdeskSaveUsers", ->
           isStarted: true, isCompleted: false, isFailed: false
       ]
 
-  it "should save new objects", ->
+  it "should save new objects @fast", ->
     task.in.write(sample)
     task.in.end()
     task.execute()
@@ -74,7 +74,7 @@ describe "FreshdeskSaveUsers", ->
         should.not.exist(command.progressBars[0].total)
         command.progressBars[0].current.should.be.equal(1)
 
-  it "should update existing objects", ->
+  it "should update existing objects @fast", ->
     task.in.write(sample)
     task.in.end()
     task.execute()

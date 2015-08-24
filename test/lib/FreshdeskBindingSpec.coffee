@@ -14,7 +14,7 @@ describe "FreshdeskBinding", ->
       details: settings.credentials["Freshdesk"]["Generic"]
     )
 
-  it "binding.getUsers() :: GET /contacts.json", ->
+  it "binding.getUsers() :: GET /contacts.json @fast", ->
     new Promise (resolve, reject) ->
       nock.back "test/fixtures/FreshdeskBinding/getUsers.json", (recordingDone) ->
         binding.getUsers()
