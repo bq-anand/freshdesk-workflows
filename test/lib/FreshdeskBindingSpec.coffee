@@ -1,7 +1,9 @@
 _ = require "underscore"
 Promise = require "bluebird"
-FreshdeskBinding = require "../../lib/FreshdeskBinding"
+MemoryLeakTester = require "../../core/lib/MemoryLeakTester"
 settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/test.json")
+
+FreshdeskBinding = require "../../lib/FreshdeskBinding"
 
 describe "FreshdeskBinding", ->
   @timeout(10000) if process.env.NOCK_BACK_MODE is "record"
@@ -28,7 +30,18 @@ describe "FreshdeskBinding", ->
         .catch reject
         .finally recordingDone # use .finally to propagate exceptions (.then swallows them)
 
-#  it "binding should report rate limiting errors @ratelimit", (testDone) ->
-#    binding
-#    testDone()
-#
+  it "shouldn't leak memory @slow", ->
+    @timeout(60000)
+    tester = new MemoryLeakTester(
+      runner: ->
+        new Promise (resolve, reject) ->
+          nock.back "test/fixtures/FreshdeskBinding/getUsers.json", (recordingDone) ->
+            binding.getUsers()
+            .spread (response, body) ->
+              should.exist(response)
+              should.exist(body)
+            .then resolve
+            .catch reject
+            .finally recordingDone
+    )
+    tester.execute()

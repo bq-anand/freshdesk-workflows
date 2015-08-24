@@ -1,13 +1,13 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
+MemoryLeakTester = require "../../core/lib/MemoryLeakTester"
 createDependencies = require "../../core/helper/dependencies"
 settings = (require "../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/test.json")
 
 FreshdeskSerializer = require "../../lib/FreshdeskSerializer"
 createFreshdeskUsers = require "../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
-MemoryLeakTester = require "../../core/lib/MemoryLeakTester"
 
 describe "FreshdeskSerializer", ->
   dependencies = createDependencies(settings, "FreshdeskSerializer")
@@ -41,4 +41,3 @@ describe "FreshdeskSerializer", ->
         serializer.toExternal(serializer.toInternal(sample))
     )
     tester.execute()
-    .then -> console.log tester.currentLoops
