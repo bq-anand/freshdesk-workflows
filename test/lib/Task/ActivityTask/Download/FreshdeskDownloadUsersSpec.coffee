@@ -34,19 +34,14 @@ describe "FreshdeskDownloadUsers", ->
     task = new FreshdeskDownloadUsers(
       _.defaults
         FreshdeskReadUsers:
-          input:
-            avatarId: input.avatarId
-            params: {}
+          avatarId: input.avatarId
+          params: {}
         FreshdeskSaveUsers:
-          input:
-            avatarId: input.avatarId
-            params: {}
+          avatarId: input.avatarId
+          params: {}
       , input
     ,
       activityId: "FreshdeskDownloadUsers"
-    ,
-      in: new stream.PassThrough({objectMode: true})
-      out: new stream.PassThrough({objectMode: true})
     ,
       dependencies
     )

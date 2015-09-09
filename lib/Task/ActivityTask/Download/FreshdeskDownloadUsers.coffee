@@ -2,19 +2,17 @@ _ = require "underscore"
 Promise = require "bluebird"
 Match = require "mtr-match"
 Download = require "../../../../core/lib/Task/ActivityTask/Download"
-FreshdeskReadUsers = require "../BindingTask/Read/FreshdeskReadUsers"
-FreshdeskSaveUsers = require "../Save/FreshdeskSaveUsers"
+FreshdeskReadUsers = require "../../../Strategy/APIStrategy/Read/OptimisticLookahead/FreshdeskReadUsers"
+FreshdeskSaveUsers = require "../../../Strategy/DBStrategy/Save/TemporaryTable/FreshdeskSaveUsers"
 
 class FreshdeskDownloadUsers extends Download
-  constructor: (input, options, streams, dependencies) ->
+  constructor: (input, options, dependencies) ->
     Match.check input, Match.ObjectIncluding
       FreshdeskReadUsers: Object
       FreshdeskSaveUsers: Object
-    readArguments = @arguments input, "FreshdeskReadUsers"
-    saveArguments = @arguments input, "FreshdeskSaveUsers"
-    _.extend @,
-      read: new FreshdeskReadUsers readArguments.input, readArguments.options, streams, dependencies
-      save: new FreshdeskSaveUsers saveArguments.input, saveArguments.options, streams, dependencies
     super
+
+  createReadStrategy: -> new FreshdeskReadUsers @FreshdeskReadUsers, @dependencies
+  createSaveStrategy: -> new FreshdeskSaveUsers @FreshdeskSaveUsers, @dependencies
 
 module.exports = FreshdeskDownloadUsers

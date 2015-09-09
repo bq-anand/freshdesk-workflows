@@ -1,6 +1,6 @@
 _ = require "underscore"
 Promise = require "bluebird"
-OptimisticLookahead = require "../../../../../core/lib/Task/ActivityTask/BindingTask/Read/OptimisticLookahead"
+OptimisticLookahead = require "../../../../../core/lib/Strategy/APIStrategy/Read/OptimisticLookahead"
 FreshdeskBinding = require "../../../../FreshdeskBinding"
 
 class FreshdeskReadUsers extends OptimisticLookahead

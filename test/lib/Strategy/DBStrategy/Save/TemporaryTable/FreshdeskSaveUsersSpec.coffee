@@ -1,12 +1,12 @@
 _ = require "underscore"
 Promise = require "bluebird"
 stream = require "readable-stream"
-input = require "../../../../../core/test-helper/input"
-createDependencies = require "../../../../../core/helper/dependencies"
-settings = (require "../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/test.json")
+input = require "../../../../../../core/test-helper/input"
+createDependencies = require "../../../../../../core/helper/dependencies"
+settings = (require "../../../../../../core/helper/settings")("#{process.env.ROOT_DIR}/settings/test.json")
 
-FreshdeskSaveUsers = require "../../../../../lib/Task/ActivityTask/Save/FreshdeskSaveUsers"
-createFreshdeskUsers = require "../../../../../lib/Model/FreshdeskUsers"
+FreshdeskSaveUsers = require "../../../../../../lib/Strategy/DBStrategy/Save/TemporaryTable/FreshdeskSaveUsers"
+createFreshdeskUsers = require "../../../../../../lib/Model/FreshdeskUsers"
 sample = require "#{process.env.ROOT_DIR}/test/fixtures/FreshdeskSaveUsers/sample.json"
 
 describe "FreshdeskSaveUsers", ->
@@ -18,7 +18,7 @@ describe "FreshdeskSaveUsers", ->
   Commands = mongodb.collection("Commands")
   Issues = mongodb.collection("Issues")
 
-  task = null; # shared between tests
+  strategy = null; # shared between tests
 
   before ->
     Promise.bind(@)
@@ -29,13 +29,8 @@ describe "FreshdeskSaveUsers", ->
     knex.destroy()
 
   beforeEach ->
-    task = new FreshdeskSaveUsers(
+    strategy = new FreshdeskSaveUsers(
       _.defaults {}, input
-    ,
-      activityId: "FreshdeskSaveUsers"
-    ,
-      in: new stream.PassThrough({objectMode: true})
-      out: new stream.PassThrough({objectMode: true})
     ,
       dependencies
     )
@@ -46,20 +41,10 @@ describe "FreshdeskSaveUsers", ->
         Commands.remove()
         Issues.remove()
       ]
-    .then ->
-      Promise.all [
-        Commands.insert
-          _id: input.commandId
-          progressBars: [
-            activityId: "FreshdeskSaveUsers", isStarted: true, isCompleted: false, isFailed: false
-          ]
-          isStarted: true, isCompleted: false, isFailed: false
-      ]
 
   it "should save new objects @fast", ->
-    task.in.write(sample)
-    task.in.end()
-    task.execute()
+    strategy.on "ready", -> strategy.insert(sample)
+    strategy.execute()
     .then ->
       knex(FreshdeskUsers::tableName).count("id")
       .then (results) ->
@@ -68,32 +53,20 @@ describe "FreshdeskSaveUsers", ->
       FreshdeskUsers.where({email: "example@example.com"}).fetch()
       .then (model) ->
         should.exist(model)
-    .then ->
-      Commands.findOne(input.commandId)
-      .then (command) ->
-        should.not.exist(command.progressBars[0].total)
-        command.progressBars[0].current.should.be.equal(1)
 
   it "should update existing objects @fast", ->
-    task.in.write(sample)
-    task.in.end()
-    task.execute()
+    strategy.on "ready", -> strategy.insert(sample)
+    strategy.execute()
     .then ->
-      task = new FreshdeskSaveUsers(
+      strategy = new FreshdeskSaveUsers(
         _.defaults {}, input
-      ,
-        activityId: "FreshdeskSaveUsers"
-      ,
-        in: new stream.PassThrough({objectMode: true})
-        out: new stream.PassThrough({objectMode: true})
       ,
         dependencies
       )
-      task.in.write _.defaults
+      strategy.on "ready", -> strategy.insert _.defaults
         "email": "another-example@example.com",
       , sample
-      task.in.end()
-      task.execute()
+      strategy.execute()
     .then ->
       knex(FreshdeskUsers::tableName).count("id")
       .then (results) ->
