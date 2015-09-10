@@ -13,7 +13,7 @@
     "transports": {
       "Console": {
         "silent": true,
-        "level": "info",
+        "level": "verbose",
         "handleExceptions": false,
         "prettyPrint": true,
         "colorize": true,
