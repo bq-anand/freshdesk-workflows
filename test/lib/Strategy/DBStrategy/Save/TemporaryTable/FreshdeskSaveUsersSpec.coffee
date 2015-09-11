@@ -43,8 +43,12 @@ describe "FreshdeskSaveUsers", ->
       ]
 
   it "should save new objects @fast", ->
-    strategy.on "ready", -> strategy.insert(sample)
-    strategy.execute()
+    knex.transaction (transaction) =>
+      strategy.transaction = transaction
+      Promise.bind(@)
+      .then -> strategy.start()
+      .then -> strategy.insert(sample)
+      .then -> strategy.finish()
     .then ->
       knex(FreshdeskUsers::tableName).count("id")
       .then (results) ->
@@ -55,18 +59,33 @@ describe "FreshdeskSaveUsers", ->
         should.exist(model)
 
   it "should update existing objects @fast", ->
-    strategy.on "ready", -> strategy.insert(sample)
-    strategy.execute()
+    Promise.bind(@)
     .then ->
-      strategy = new FreshdeskSaveUsers(
-        _.defaults {}, input
-      ,
-        dependencies
-      )
-      strategy.on "ready", -> strategy.insert _.defaults
-        "email": "another-example@example.com",
-      , sample
-      strategy.execute()
+      knex.transaction (transaction) =>
+        strategy = new FreshdeskSaveUsers(
+          _.defaults {}, input
+        ,
+          dependencies
+        )
+        strategy.transaction = transaction
+        Promise.bind(@)
+        .then -> strategy.start()
+        .then -> strategy.insert(sample)
+        .then -> strategy.finish()
+    .then ->
+      knex.transaction (transaction) =>
+        strategy = new FreshdeskSaveUsers(
+          _.defaults {}, input
+        ,
+          dependencies
+        )
+        strategy.transaction = transaction
+        Promise.bind(@)
+        .then -> strategy.start()
+        .then -> strategy.insert _.defaults
+          "email": "another-example@example.com",
+        , sample
+        .then -> strategy.finish()
     .then ->
       knex(FreshdeskUsers::tableName).count("id")
       .then (results) ->
