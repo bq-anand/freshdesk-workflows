@@ -44,9 +44,8 @@ describe "FreshdeskSaveUsers", ->
 
   it "should save new objects @fast", ->
     knex.transaction (transaction) =>
-      strategy.transaction = transaction
       Promise.bind(@)
-      .then -> strategy.start()
+      .then -> strategy.start(transaction)
       .then -> strategy.insert(sample)
       .then -> strategy.finish()
     .then ->
@@ -67,9 +66,8 @@ describe "FreshdeskSaveUsers", ->
         ,
           dependencies
         )
-        strategy.transaction = transaction
         Promise.bind(@)
-        .then -> strategy.start()
+        .then -> strategy.start(transaction)
         .then -> strategy.insert(sample)
         .then -> strategy.finish()
     .then ->
@@ -79,9 +77,8 @@ describe "FreshdeskSaveUsers", ->
         ,
           dependencies
         )
-        strategy.transaction = transaction
         Promise.bind(@)
-        .then -> strategy.start()
+        .then -> strategy.start(transaction)
         .then -> strategy.insert _.defaults
           "email": "another-example@example.com",
         , sample
