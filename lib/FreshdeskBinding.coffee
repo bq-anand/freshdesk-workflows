@@ -18,7 +18,7 @@ class FreshdeskBinding extends Binding
     super(options).spread (response, body) ->
       if response.statusCode is 403
         throw new errors.RateLimitReachedError
-          response: response
+          response: response.toJSON()
           body: body
       [response, body]
 
