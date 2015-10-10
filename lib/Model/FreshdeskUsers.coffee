@@ -24,9 +24,9 @@ module.exports = (bookshelf) ->
         table.string("time_zone").nullable()
         table.string("twitter_id").nullable()
         table.json("custom_field", true).nullable()
-        table.boolean("helpdesk_agent").notNullable()
-        table.boolean("active").notNullable()
-        table.boolean("deleted").notNullable()
+        table.boolean("helpdesk_agent").nullable()
+        table.boolean("active").nullable()
+        table.boolean("deleted").nullable()
         table.dateTime("created_at").notNullable()  # native Freshdesk _createdAt
         table.dateTime("updated_at").notNullable()  # native Freshdesk _updatedAt
         table.bigInteger("_uid").notNullable().unsigned() # native Freshdesk id
