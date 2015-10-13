@@ -11,7 +11,7 @@ class FreshdeskBinding extends Binding
 
   request: (options) ->
     _.defaults(options,
-      baseUrl: "https://#{@credential.details.domain}"
+      baseUrl: "#{if @credential.details.noProxy then "https" else "http"}://#{@credential.details.domain}" # sorry for noProxy hack, but the full-fledged implementation requires a Redis rate limiter
       json: true
     )
     BasicAuthentication(@credential.details, options)
